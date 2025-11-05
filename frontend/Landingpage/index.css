@@ -91,7 +91,7 @@ body.dark-theme .welcome-container h1 {
 
 /* Subtitle styling */
 .welcome-container p {
-  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  font-size: clamp(1.5rem, 2.9vw, 1.8rem);
   margin-bottom: 3rem;
   max-width: 700px;
   margin-left: auto;

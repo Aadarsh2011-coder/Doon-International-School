@@ -53,3 +53,120 @@ body::before {
   transition: all 0.3s ease;
   letter-spacing: -0.5px;
 }
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 60px 40px 40px 40px;
+  margin-top: 0;
+  position: relative;
+}
+
+/* Welcome heading */
+.welcome-container h1 {
+  position: static;
+  background: none;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  margin-bottom: 1rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  line-height: 1.2;
+  transition: all 0.3s ease;
+}
+
+body.dark-theme .welcome-container h1 {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtitle styling */
+.welcome-container p {
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  margin-bottom: 3rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.9;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+body.dark-theme .welcome-container p {
+  color: #e0e0e0;
+}
+
+/* Button container */
+.button-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 3rem;
+}
+
+/* Class buttons */
+.class-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 16px 24px;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  text-decoration: none;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+body.dark-theme .class-button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+}
+
+.class-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.class-button:hover::before {
+  left: 100%;
+}
+
+.class-button:hover,
+.class-button:focus {
+  background: rgba(255, 255, 255, 0.95);
+  color: #764ba2;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  border-color: white;
+  outline: none;
+}
+
+body.dark-theme .class-button:hover,
+body.dark-theme .class-button:focus {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+  border-color: #4CAF50;
+}

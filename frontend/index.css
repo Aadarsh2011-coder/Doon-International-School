@@ -34,8 +34,22 @@ body::before {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.8; }
 }
-h1{
-    color:black;
-    text-align:center;
-    margin-top:200px;
+
+.fixed-header {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #667eea;
+  text-align: center;
+  border-radius: 2px solid #667eea;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  z-index: 1000;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  letter-spacing: -0.5px;
 }

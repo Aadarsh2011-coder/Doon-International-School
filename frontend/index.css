@@ -53,6 +53,7 @@ body::before {
   transition: all 0.3s ease;
   letter-spacing: -0.5px;
 }
+/* Welcome container */
 .welcome-container {
   display: flex;
   flex-direction: column;
@@ -61,7 +62,7 @@ body::before {
   min-height: 100vh;
   text-align: center;
   padding: 60px 40px 40px 40px;
-  margin-top: 0;
+  margin-top: 35px;
   position: relative;
 }
 

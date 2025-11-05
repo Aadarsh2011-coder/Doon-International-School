@@ -34,3 +34,8 @@ body::before {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.8; }
 }
+h1{
+    color:black;
+    text-align:center;
+    margin-top:20px;
+}

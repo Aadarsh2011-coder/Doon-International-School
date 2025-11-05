@@ -1,173 +1,405 @@
-/* ====================== Global ====================== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  color: #1a202c;
-  overflow-x: hidden;
-  position: relative;
-}
+        /* ====================== Global ====================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* ================= Animated Background ================= */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 138, 101, 0.3), transparent 50%),
-    radial-gradient(circle at 40% 20%, rgba(138, 180, 248, 0.3), transparent 50%);
-  animation: backgroundShift 15s ease infinite;
-  z-index: -1;
-}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1a202c;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-@keyframes backgroundShift {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-}
+        /* ================= Animated Background ================= */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 138, 101, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(138, 180, 248, 0.3), transparent 50%);
+            animation: backgroundShift 15s ease infinite;
+            z-index: -1;
+        }
 
-.fixed-header {
-  position: fixed;
-  top: 3rem;
-  left: 27rem;
-  background: rgba(255, 255, 255, 0.95);
-  color: #667eea;
-  text-align: center;
-  border-radius: 2px solid black;
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  z-index: 1000;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  letter-spacing: -0.5px;
-}
-/* Welcome container */
-.welcome-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  text-align: center;
-  padding: 60px 40px 40px 40px;
-  margin-top: 35px;
-  position: relative;
-}
+        @keyframes backgroundShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
 
-/* Welcome heading */
-.welcome-container h1 {
-  position: static;
-  background: none;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  margin-bottom: 1rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  line-height: 1.2;
-  transition: all 0.3s ease;
-}
+        .fixed-header {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            text-align: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            letter-spacing: -0.5px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
 
-body.dark-theme .welcome-container h1 {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+        /* Welcome container */
+        .welcome-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 120px 40px 40px 40px;
+            position: relative;
+        }
 
-/* Subtitle styling */
-.welcome-container p {
-  font-size: clamp(1.5rem, 2.9vw, 1.8rem);
-  margin-bottom: 3rem;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  opacity: 0.9;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
+        /* Welcome heading */
+        .welcome-container h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 1rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            line-height: 1.2;
+            transition: all 0.3s ease;
+        }
 
-body.dark-theme .welcome-container p {
-  color: #e0e0e0;
-}
+        /* Subtitle styling */
+        .welcome-container p {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
 
-/* Button container */
-.button-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  width: 100%;
-  max-width: 800px;
-  margin-bottom: 3rem;
-}
+        /* Button container */
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
 
-/* Class buttons */
-.class-button {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  padding: 16px 24px;
-  font-size: 1.1rem;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-  text-decoration: none;
-  display: inline-block;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  position: relative;
-  overflow: hidden;
-}
+        /* Class buttons */
+        .class-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            text-decoration: none;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
 
-body.dark-theme .class-button {
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  color: #e0e0e0;
-}
+        .class-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
 
-.class-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
+        .class-button:hover::before {
+            left: 100%;
+        }
 
-.class-button:hover::before {
-  left: 100%;
-}
+        .class-button:hover,
+        .class-button:focus {
+            background: rgba(255, 255, 255, 0.95);
+            color: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            border-color: white;
+            outline: none;
+        }
 
-.class-button:hover,
-.class-button:focus {
-  background: rgba(255, 255, 255, 0.95);
-  color: #764ba2;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  border-color: white;
-  outline: none;
-}
+        .class-button.active {
+            background: rgba(255, 255, 255, 0.95);
+            color: #764ba2;
+            border-color: white;
+        }
 
-body.dark-theme .class-button:hover,
-body.dark-theme .class-button:focus {
-  background: rgba(76, 175, 80, 0.2);
-  color: #4CAF50;
-  border-color: #4CAF50;
-}
+        /* Teacher Portal Icon */
+        .teacher-portal-icon {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1001;
+        }
+
+        .teacher-icon-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid rgba(102, 126, 234, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(20px);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .teacher-icon-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .teacher-icon-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .teacher-icon-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            border-color: #667eea;
+        }
+
+        .teacher-icon-btn svg {
+            width: 30px;
+            height: 30px;
+            fill: #667eea;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .teacher-icon-btn:hover svg {
+            fill: #764ba2;
+            transform: scale(1.1);
+        }
+
+        /* Tooltip for teacher icon */
+        .teacher-icon-btn::after {
+            content: 'Teacher Upload Portal';
+            position: absolute;
+            top: 70px;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .teacher-icon-btn:hover::after {
+            opacity: 1;
+        }
+
+        /* Class View */
+        #classView {
+            display: none;
+            padding: 120px 2rem 2rem 2rem;
+            color: white;
+            min-height: 100vh;
+        }
+
+        #classView.active {
+            display: block;
+        }
+
+        #classView h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            display: inline-block;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.95);
+            color: #764ba2;
+            border-color: white;
+        }
+
+        .test-card {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 1.5rem auto;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .test-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .test-card p {
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+
+        .test-card iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-card a {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .test-card a:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .no-tests {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .no-tests p {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .fixed-header {
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+                top: 1rem;
+            }
+
+            .teacher-portal-icon {
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .teacher-icon-btn {
+                width: 50px;
+                height: 50px;
+            }
+
+            .teacher-icon-btn svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .welcome-container {
+                padding: 100px 20px 40px 20px;
+            }
+
+            .button-container {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            #classView {
+                padding: 100px 1rem 1rem 1rem;
+            }
+
+            .test-card {
+                padding: 1.5rem;
+            }
+
+            .test-card iframe {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-container h1 {
+                font-size: 2rem;
+            }
+
+            .welcome-container p {
+                font-size: 1rem;
+            }
+
+            .fixed-header {
+                font-size: 0.75rem;
+                padding: 0.5rem 0.8rem;
+            }
+          }

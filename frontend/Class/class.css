@@ -1,174 +1,94 @@
-/* ====================== Global ====================== */
+/* ========== Global Reset ========== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* ========== Body Styling ========== */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #e1bee7);
   min-height: 100vh;
-  color: #1a202c;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   overflow-x: hidden;
-  position: relative;
 }
 
-/* ================= Animated Background ================= */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 138, 101, 0.3), transparent 50%),
-    radial-gradient(circle at 40% 20%, rgba(138, 180, 248, 0.3), transparent 50%);
-  animation: backgroundShift 15s ease infinite;
-  z-index: -1;
-}
-
-@keyframes backgroundShift {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-}
-
-
-fixed-header {
-  position: fixed;
-  top: 3rem;
-  left: 27rem;
-  background: rgba(255, 255, 255, 0.95);
-  color: #667eea;
-  text-align: center;
-  border-radius: 2px solid black;
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  font-size: 1.1rem;
+/* ========== Header ========== */
+.fixed-header {
+  margin-top: 2rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  z-index: 1000;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  letter-spacing: -0.5px;
+  background: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: #4a148c;
+  letter-spacing: 0.5px;
+  border: 2px solid rgba(74, 20, 140, 0.1);
 }
-/* Welcome container */
+
+/* ========== Welcome Container ========== */
 .welcome-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
   text-align: center;
-  padding: 60px 40px 40px 40px;
-  margin-top: 35px;
-  position: relative;
+  min-height: 90vh;
+  padding: 40px 20px;
 }
 
-/* Welcome heading */
+/* ========== Main Heading ========== */
 .welcome-container h1 {
-  position: static;
-  background: none;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  margin-bottom: 1rem;
+  font-size: clamp(2rem, 6vw, 3.5rem);
   font-weight: 800;
-  background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  line-height: 1.2;
-  transition: all 0.3s ease;
+  margin-bottom: 2.5rem;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
-body.dark-theme .welcome-container h1 {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Subtitle styling */
-.welcome-container p {
-  font-size: clamp(1.5rem, 2.9vw, 1.8rem);
-  margin-bottom: 3rem;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  opacity: 0.9;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-body.dark-theme .welcome-container p {
-  color: #e0e0e0;
-}
-
-/* Button container */
+/* ========== Button Container ========== */
 .button-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
   width: 100%;
-  max-width: 800px;
-  margin-bottom: 3rem;
+  max-width: 700px;
 }
 
-/* Class buttons */
+/* ========== Buttons ========== */
 .class-button {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(0, 0, 0, 0.05);
+  color: #333;
   padding: 16px 24px;
   font-size: 1.1rem;
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   text-decoration: none;
-  display: inline-block;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  position: relative;
-  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(6px);
 }
 
-body.dark-theme .class-button {
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  color: #e0e0e0;
-}
-
-.class-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.class-button:hover::before {
-  left: 100%;
-}
-
+/* Hover and Focus Effects */
 .class-button:hover,
 .class-button:focus {
-  background: rgba(255, 255, 255, 0.95);
-  color: #764ba2;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  border-color: white;
-  outline: none;
+  background: linear-gradient(135deg, #a5d6a7, #81d4fa);
+  color: #0d47a1;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-color: rgba(13, 71, 161, 0.3);
 }
 
-body.dark-theme .class-button:hover,
-body.dark-theme .class-button:focus {
-  background: rgba(76, 175, 80, 0.2);
-  color: #4CAF50;
-  border-color: #4CAF50;
+/* Smooth transition for active click */
+.class-button:active {
+  transform: scale(0.98);
 }

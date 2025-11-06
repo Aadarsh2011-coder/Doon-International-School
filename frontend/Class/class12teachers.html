@@ -1,84 +1,58 @@
+<!-- Class/class12teachers.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teacher's Mode - Upload Today's Test</title>
-  <link rel="stylesheet" href="teachersclass.css">
+  <title>Upload Test - Class 12</title>
+  <link rel="stylesheet" href="../index.css">
+  <script type="module" src="../appwrite.js"></script>
 </head>
-
 <body>
-  <div class="container">
-    <div class="teacher-section">
-      <h2>Teacher Upload Portal Class 12</h2>
-
-      <div class="subject-grid">
-        <button class="subject-btn" data-subject="Mathematics">Mathematics</button>
-        <button class="subject-btn" data-subject="Physics">Physics</button>
-        <button class="subject-btn" data-subject="Chemistry">Chemistry</button>
-        <button class="subject-btn" data-subject="Biology">Biology</button>
-        <button class="subject-btn" data-subject="English">English</button>
-        <button class="subject-btn" data-subject="Hindi">Hindi</button>
-        <button class="subject-btn" data-subject="Computer Science">Computer Science</button>
-        <button class="subject-btn" data-subject="History">History</button>
-        <button class="subject-btn" data-subject="Geography">Geography</button>
-        <button class="subject-btn" data-subject="Civics">Civics</button>
-        <button class="subject-btn" data-subject="Economics">Economics</button>
+  <h1 class="fixed-header">Upload Test - Class 12</h1>
+  
+  <div class="welcome-container">
+    <button onclick="history.back()" class="cancel-btn" style="margin-bottom:20px;">Back</button>
+    <form id="uploadForm">
+      <div class="input-group">
+        <label>Subject</label>
+        <input type="text" id="subject" required placeholder="e.g. Computer Science">
       </div>
-    </div>
+      <div class="input-group">
+        <label>Teacher Name</label>
+        <input type="text" id="teacher" required placeholder="e.g. Ms. Verma">
+      </div>
+      <div class="input-group">
+        <label>Test Name</label>
+        <input type="text" id="topic" required placeholder="e.g. Python Functions Test">
+      </div>
+      <div class="input-group">
+        <label>Upload PDF/Image</label>
+        <input type="file" id="file" accept=".pdf,image/*" required>
+      </div>
+      <button type="submit" class="confirm-btn">UPLOAD TEST</button>
+    </form>
+    <div id="msg" style="margin-top:20px; font-weight:bold;"></div>
   </div>
 
-  <!-- Upload Modal -->
-  <div id="uploadModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Upload Test Paper</h2>
+  <script type="module">
+    import { uploadTest } from '../appwrite.js';
 
-      <div class="success-message" id="successMessage">
-        Test uploaded successfully! ✓
-      </div>
+    document.getElementById('uploadForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const file = document.getElementById('file').files[0];
+      const subject = document.getElementById('subject').value;
+      const teacher = document.getElementById('teacher').value;
+      const topic = document.getElementById('topic').value;
 
-      <form id="uploadForm">
-        <input type="hidden" id="selectedSubject" value="">
+      if (!file) return alert("Select file");
 
-        <div class="form-group">
-          <label for="subjectName">Subject Name</label>
-          <input type="text" id="subjectName" required placeholder="e.g., Mathematics">
-        </div>
-
-        <div class="form-group">
-          <label for="teacherName">Teacher's Name</label>
-          <input type="text" id="teacherName" required placeholder="e.g., Mr. Rajesh Kumar">
-        </div>
-
-        <div class="form-group">
-          <label for="topicName">Test Name</label>
-          <input type="text" id="topicName" required placeholder="e.g., Chapter 5 - Quadratic Equations">
-        </div>
-
-        <div class="form-group">
-          <label for="testDate">Test Date</label>
-          <input type="date" id="testDate" required>
-          <p id="formattedDate" style="margin-top: 5px; color: gray;"></p>
-        </div>
-
-        <div class="form-group">
-          <label>Upload PDF or Image</label>
-          <div class="file-upload">
-            <input type="file" id="fileInput" accept=".pdf,image/*" required>
-            <label for="fileInput" class="file-upload-label">
-              <span id="fileLabelText">📄 Click to select PDF or Image</span>
-            </label>
-            <div class="file-name" id="fileName"></div>
-          </div>
-        </div>
-
-        <button type="submit" class="submit-btn">Upload Test Paper</button>
-      </form>
-    </div>
-  </div>
-
-  <script src="teachersclass.js"></script>
-  <script src="calender.js"></script>
+      try {
+        await uploadTest(file, "Class 12", subject, teacher, topic);
+        document.getElementById('msg').innerHTML = "Uploaded Successfully!";
+        e.target.reset();
+      } catch (err) {
+        document.getElementById('msg').innerHTML = "Upload failed: " + err.message;
+      }
+    };
+  </script>
 </body>
 </html>

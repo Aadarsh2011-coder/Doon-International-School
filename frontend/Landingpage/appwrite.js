@@ -9,7 +9,7 @@ export const storage = new Storage(client);
 export const databases = new Databases(client);
 
 export const BUCKET_ID = '690cbd9100161fe0ef26';
-export const DATABASE_ID = '690cbd94000e313b9a47'; // YOUR DB ID
+export const DATABASE_ID = '690cc2620003f3aa832a'; 
 export const COLLECTION_ID = 'tests';         // Create this collection
 
 // Upload file + save metadata

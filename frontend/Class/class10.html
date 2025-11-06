@@ -1,23 +1,69 @@
+<!-- class10.html -->
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="class.css">
-        <title>Class 09 - Subject Selecter</title>
-        </head>
+<html>
+<head>
+  <title>Class 10 Tests</title>
+  <link rel="stylesheet" href="index.css">
+  <script type="module" src="appwrite.js"></script>
+  <style>
+    .test-card {
+      background: white;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 800px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    img, iframe { width: 100%; border-radius: 10px; margin-top: 10px; }
+  </style>
+</head>
 <body>
-    <h1 class="fixed-header">Doon International School Jammu's Test Recoder - Class 10</h1>
-    <div class="welcome-container">
-        <h1>Select Your Subject</h1>
-        <div class="button-container">
-            <a href="/frontend/Class9Subjects/maths.html" class="class-button">Mathematics</a>
-            <a href="/frontend/Class9Subjects/science.html" class="class-button">Science</a>
-            <a href="/frontend/Class9Subjects/socialscience.html" class="class-button">Social Science</a>
-            <a href="/frontend/Class9Subjects/english.html" class="class-button">English</a>
-            <a href="/frontend/Class9Subjects/hindi.html" class="class-button">Hindi</a>
-            <a href="/frontend/Class9Subjects/hindi.html" class="class-button">IT</a>
-        </div>
-    </div>
+  <h1 class="fixed-header">Class 10 - All Tests</h1>
+  <div class="welcome-container">
+    <button onclick="history.back()" class="cancel-btn" style="margin-bottom:20px;">Back</button>
+    <div id="tests"></div>
+  </div>
+
+  <script type="module">
+    import { getTestsForClass, storage, BUCKET_ID } from './appwrite.js';
+
+    const testsDiv = document.getElementById('tests');
+
+    async function loadTests() {
+      const tests = await getTestsForClass("Class 10");
+      
+      if (tests.length === 0) {
+        testsDiv.innerHTML = "<p>No tests uploaded yet.</p>";
+        return;
+      }
+
+      const projectId = '690cbc750001ae465885';
+      testsDiv.innerHTML = tests.map(test => {
+        const url = `https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${test.fileId}/view?project=${projectId}`;
+        
+        const isPDF = test.fileId.toLowerCase().includes('.pdf');
+        
+        return `
+          <div class="test-card">
+            <h2>${test.topic}</h2>
+            <p><strong>Subject:</strong> ${test.subject}</p>
+            <p><strong>Teacher:</strong> ${test.teacher}</p>
+            <p><strong>Uploaded:</strong> ${new Date(test.uploadedAt).toLocaleDateString()}</p>
+            ${isPDF 
+              ? `<iframe src="${url}" height="600"></iframe>`
+              : `<img src="${url}" loading="lazy">`
+            }
+            <a href="${url}" download class="confirm-btn" style="display:inline-block; margin-top:10px; padding:10px 20px;">
+              Download
+            </a>
+          </div>
+        `;
+      }).join('');
+    }
+
+    loadTests().catch(err => {
+      testsDiv.innerHTML = `<p style="color:red;">Error loading tests: ${err.message}</p>`;
+    });
+  </script>
 </body>
 </html>

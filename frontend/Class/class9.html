@@ -1,25 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Class 9 Tests</title>
-  <link rel="stylesheet" href="index.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class 9 Tests | Doon International School</title>
   <script type="module" src="appwrite.js"></script>
-  <style>
-    .test-card {
-      background: white;
-      margin: 20px auto;
-      padding: 20px;
-      border-radius: 15px;
-      max-width: 800px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    img, iframe { width: 100%; border-radius: 10px; margin-top: 10px; }
-  </style>
+<link rel="stylesheet" href="studentclass.css">
+
 </head>
+
 <body>
   <h1 class="fixed-header">Class 9 - All Tests</h1>
+
   <div class="welcome-container">
-    <button onclick="history.back()" class="cancel-btn" style="margin-bottom:20px;">← Back</button>
+    <button onclick="history.back()" class="cancel-btn">← Back</button>
     <div id="tests"></div>
   </div>
 
@@ -37,8 +31,7 @@
       }
 
       testsDiv.innerHTML = tests.map(test => {
-        const url = `https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${test.fileId}/view?project project=690cbc750001ae465885`;
-        
+        const url = `https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${test.fileId}/view?project=690cbc750001ae465885`;
         const isPDF = test.fileId.endsWith('.pdf') || url.includes('.pdf');
         
         return `
@@ -48,10 +41,10 @@
             <p><strong>Teacher:</strong> ${test.teacher}</p>
             <p><strong>Uploaded:</strong> ${new Date(test.uploadedAt).toLocaleDateString()}</p>
             ${isPDF 
-              ? `<iframe src="${url}" height="600"></iframe>`
+              ? `<iframe src="${url}" height="500"></iframe>`
               : `<img src="${url}" loading="lazy">`
             }
-            <a href="${url}" download class="confirm-btn" style="display:inline-block; margin-top:10px; padding:10px 20px;">
+            <a href="${url}" download class="confirm-btn">
               📥 Download
             </a>
           </div>

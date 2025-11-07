@@ -120,84 +120,27 @@
     </div>
   </div>
 
+  
   <script type="module">
-    // Import uploadTest from your appwrite.js
-    // import { uploadTest } from '../appwrite.js';
+    import { uploadTest } from '../appwrite.js';
 
-    const form = document.getElementById('uploadForm');
-    const fileInput = document.getElementById('file');
-    const fileNameDisplay = document.getElementById('fileName');
-    const fileNameText = document.getElementById('fileNameText');
-    const message = document.getElementById('message');
-    const messageText = document.getElementById('messageText');
-    const submitBtn = document.getElementById('submitBtn');
-    const spinner = document.getElementById('spinner');
-    const uploadIcon = document.getElementById('uploadIcon');
-    const btnText = document.getElementById('btnText');
-
-    // File input change handler
-    fileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        fileNameText.textContent = file.name;
-        fileNameDisplay.classList.add('show');
-      } else {
-        fileNameDisplay.classList.remove('show');
-      }
-    });
-
-    // Form submit handler
-    form.addEventListener('submit', async (e) => {
+    document.getElementById('uploadForm').onsubmit = async (e) => {
       e.preventDefault();
-      
-      const file = fileInput.files[0];
+      const file = document.getElementById('file').files[0];
       const subject = document.getElementById('subject').value;
       const teacher = document.getElementById('teacher').value;
       const topic = document.getElementById('topic').value;
 
-      if (!file) {
-        showMessage('error', '❌ Please select a file to upload');
-        return;
-      }
-
-      // Show loading state
-      submitBtn.disabled = true;
-      spinner.classList.add('show');
-      uploadIcon.style.display = 'none';
-      btnText.textContent = 'UPLOADING...';
+      if (!file) return alert("Select file");
 
       try {
-        // Uncomment and use your actual upload function
-        // await uploadTest(file, "Class 9", subject, teacher, topic);
-        
-        // Simulated upload for demo (remove this in production)
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        showMessage('success', '✓ Test uploaded successfully!');
-        form.reset();
-        fileNameDisplay.classList.remove('show');
-        
-        // Auto-hide success message after 3 seconds
-        setTimeout(() => {
-          message.classList.remove('show');
-        }, 3000);
-        
+        await uploadTest(file, "Class 10", subject, teacher, topic);
+        document.getElementById('msg').innerHTML = "Uploaded Successfully!";
+        e.target.reset();
       } catch (err) {
-        showMessage('error', '❌ Upload failed: ' + err.message);
-      } finally {
-        // Reset button state
-        submitBtn.disabled = false;
-        spinner.classList.remove('show');
-        uploadIcon.style.display = 'block';
-        btnText.textContent = 'UPLOAD TEST';
+        document.getElementById('msg').innerHTML = "Upload failed: " + err.message;
       }
-    });
-
-    // Show message function
-    function showMessage(type, text) {
-      message.className = 'message show ' + type;
-      messageText.textContent = text;
-    }
+    };
   </script>
 </body>
 </html>

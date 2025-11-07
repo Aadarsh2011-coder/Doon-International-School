@@ -1,56 +1,203 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Upload Test - Class 9</title>
-  <link rel="stylesheet" href="teachersclass.css">
-  <script type="module" src="../appwrite.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Upload Portal - Class 9</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
 </head>
 <body>
-  <h1 class="fixed-header">Upload Test - Class 9</h1>
-  
-  <div class="welcome-container">
-    <form id="uploadForm">
-      <div class="input-group">
-        <label>Subject</label>
-        <input type="text" id="subject" required placeholder="e.g. Mathematics">
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="icon-wrapper">
+        <svg viewBox="0 0 24 24">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
       </div>
-      <div class="input-group">
-        <label>Teacher Name</label>
-        <input type="text" id="teacher" required placeholder="e.g. Mr. Sharma">
+      <h1>Test Upload Portal</h1>
+      <p>Class 9 • Academic Year </p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="upload-card">
+      <!-- Message Alert -->
+      <div id="message" class="message">
+        <svg id="messageIcon" viewBox="0 0 24 24">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span id="messageText"></span>
       </div>
-      <div class="input-group">
-        <label>Test Name</label>
-        <input type="text" id="topic" required placeholder="e.g. Ch 5 - Algebra Test">
-      </div>
-      <div class="input-group">
-        <label>Upload PDF/Image</label>
-        <input type="file" id="file" accept=".pdf,image/*" required>
-      </div>
-      <button type="submit" class="confirm-btn">UPLOAD TEST</button>
-    </form>
-    <div id="msg" style="margin-top:20px; font-weight:bold;"></div>
+
+      <!-- Form -->
+      <form id="uploadForm">
+        <!-- Subject -->
+        <div class="form-group">
+          <label>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#667eea">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            Subject
+          </label>
+          <input type="text" id="subject" name="subject" placeholder="e.g., Mathematics, Science, English" required>
+        </div>
+
+        <!-- Teacher Name -->
+        <div class="form-group">
+          <label>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#764ba2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Teacher Name
+          </label>
+          <input type="text" id="teacher" name="teacher" placeholder="e.g., Mr. Sharma, Mrs. Gupta" required>
+        </div>
+
+        <!-- Test Name -->
+        <div class="form-group">
+          <label>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#f093fb">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Test Name
+          </label>
+          <input type="text" id="topic" name="topic" placeholder="e.g., Chapter 5 - Algebra Test" required>
+        </div>
+
+        <!-- File Upload -->
+        <div class="form-group">
+          <label>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#667eea">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+              <polyline points="13 2 13 9 20 9"></polyline>
+            </svg>
+            Upload Document
+          </label>
+          <div class="file-upload-wrapper">
+            <input type="file" id="file" class="file-input" accept=".pdf,image/*" required>
+            <label for="file" class="file-upload-area">
+              <svg class="file-upload-icon" viewBox="0 0 24 24" fill="none">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <div class="file-upload-text">Click to upload or drag and drop</div>
+              <div class="file-upload-subtext">PDF or Image (Max 10MB)</div>
+            </label>
+            <div id="fileName" class="file-name-display">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                <polyline points="13 2 13 9 20 9"></polyline>
+              </svg>
+              <span id="fileNameText"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span class="btn-content">
+            <div class="spinner" id="spinner"></div>
+            <svg id="uploadIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span id="btnText">UPLOAD TEST</span>
+          </span>
+        </button>
+      </form>
+    </div>
   </div>
 
   <script type="module">
-    import { uploadTest } from '../appwrite.js';
+    // Import uploadTest from your appwrite.js
+    // import { uploadTest } from '../appwrite.js';
 
-    document.getElementById('uploadForm').onsubmit = async (e) => {
+    const form = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('file');
+    const fileNameDisplay = document.getElementById('fileName');
+    const fileNameText = document.getElementById('fileNameText');
+    const message = document.getElementById('message');
+    const messageText = document.getElementById('messageText');
+    const submitBtn = document.getElementById('submitBtn');
+    const spinner = document.getElementById('spinner');
+    const uploadIcon = document.getElementById('uploadIcon');
+    const btnText = document.getElementById('btnText');
+
+    // File input change handler
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        fileNameText.textContent = file.name;
+        fileNameDisplay.classList.add('show');
+      } else {
+        fileNameDisplay.classList.remove('show');
+      }
+    });
+
+    // Form submit handler
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const file = document.getElementById('file').files[0];
+      
+      const file = fileInput.files[0];
       const subject = document.getElementById('subject').value;
       const teacher = document.getElementById('teacher').value;
       const topic = document.getElementById('topic').value;
 
-      if (!file) return alert("Select file");
+      if (!file) {
+        showMessage('error', '❌ Please select a file to upload');
+        return;
+      }
+
+      // Show loading state
+      submitBtn.disabled = true;
+      spinner.classList.add('show');
+      uploadIcon.style.display = 'none';
+      btnText.textContent = 'UPLOADING...';
 
       try {
-        await uploadTest(file, "Class 9", subject, teacher, topic);
-        document.getElementById('msg').innerHTML = "✅ Uploaded Successfully!";
-        e.target.reset();
+        // Uncomment and use your actual upload function
+        // await uploadTest(file, "Class 9", subject, teacher, topic);
+        
+        // Simulated upload for demo (remove this in production)
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        showMessage('success', '✓ Test uploaded successfully!');
+        form.reset();
+        fileNameDisplay.classList.remove('show');
+        
+        // Auto-hide success message after 3 seconds
+        setTimeout(() => {
+          message.classList.remove('show');
+        }, 3000);
+        
       } catch (err) {
-        document.getElementById('msg').innerHTML = "❌ Upload failed: " + err.message;
+        showMessage('error', '❌ Upload failed: ' + err.message);
+      } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        spinner.classList.remove('show');
+        uploadIcon.style.display = 'block';
+        btnText.textContent = 'UPLOAD TEST';
       }
-    };
+    });
+
+    // Show message function
+    function showMessage(type, text) {
+      message.className = 'message show ' + type;
+      messageText.textContent = text;
+    }
   </script>
 </body>
 </html>

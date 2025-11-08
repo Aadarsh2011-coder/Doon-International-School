@@ -49,7 +49,9 @@
 
 
 // appwrite.js
-import { Client, Storage, Databases, ID, Query } from "appwrite";
+// appwrite.js
+// Import from CDN instead of node_modules
+import { Client, Storage, Databases, ID, Query } from 'https://cdn.jsdelivr.net/npm/appwrite@15.0.0/dist/esm/index.js';
 
 const client = new Client()
     .setEndpoint('https://fra.cloud.appwrite.io/v1')
@@ -57,7 +59,6 @@ const client = new Client()
 
 export const storage = new Storage(client);
 export const databases = new Databases(client);
-
 export const BUCKET_ID = '690cbd9100161fe0ef26';
 export const DATABASE_ID = '690cc2620003f3aa832a'; 
 export const COLLECTION_ID = 'tests';          // Create this collection

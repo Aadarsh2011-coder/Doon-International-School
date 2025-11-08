@@ -3,17 +3,13 @@
 <html>
 <head>
   <title>Upload Test - Class 12</title>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="teachersclass.css">
- 
-
- <script src="
-https://cdn.jsdelivr.net/npm/appwrite@21.4.0/dist/iife/sdk.min.js
-"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./teachersclass.css">
+  <script type="module" src="./appwrite.js"></script>
 </head>
 <body>
   <h1 class="fixed-header">Upload Test - Class 12</h1>
-  
+
   <div class="welcome-container">
     <button onclick="history.back()" class="cancel-btn" style="margin-bottom:20px;">Back</button>
     <form id="uploadForm">
@@ -39,17 +35,14 @@ https://cdn.jsdelivr.net/npm/appwrite@21.4.0/dist/iife/sdk.min.js
   </div>
 
   <script type="module">
-    import { uploadTest } from 'appwrite.js';
-
+    import { uploadTest } from './appwrite.js';
     document.getElementById('uploadForm').onsubmit = async (e) => {
       e.preventDefault();
       const file = document.getElementById('file').files[0];
       const subject = document.getElementById('subject').value;
       const teacher = document.getElementById('teacher').value;
       const topic = document.getElementById('topic').value;
-
       if (!file) return alert("Select file");
-
       try {
         await uploadTest(file, "Class 12", subject, teacher, topic);
         document.getElementById('msg').innerHTML = "Uploaded Successfully!";

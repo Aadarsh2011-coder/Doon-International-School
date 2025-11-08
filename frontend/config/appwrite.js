@@ -51,7 +51,7 @@
 // appwrite.js
 // appwrite.js
 // Import from CDN instead of node_modules
-import { Client, Storage, Databases, ID, Query } from 'https://cdn.jsdelivr.net/npm/appwrite@15.0.0/dist/esm/index.js';
+import { Client, Storage, Databases, ID, Query } from 'https://esm.sh/appwrite@16.0.2';
 
 const client = new Client()
     .setEndpoint('https://fra.cloud.appwrite.io/v1')

@@ -16,6 +16,8 @@ export const COLLECTION_ID = 'tests';         // Create this collection
 export const uploadTest = async (file, className, subject, teacher, topic) => {
     const fileResponse = await storage.createFile(BUCKET_ID, ID.unique(), file);
     
+
+    
     await databases.createDocument(
         DATABASE_ID,
         COLLECTION_ID,

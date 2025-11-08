@@ -35,7 +35,7 @@
   </div>
 
   <script type="module">
-    import { uploadTest } from './config/appwrite.js';
+    import { uploadTest } from '../config/appwrite.js';
     document.getElementById('uploadForm').onsubmit = async (e) => {
       e.preventDefault();
       const file = document.getElementById('file').files[0];

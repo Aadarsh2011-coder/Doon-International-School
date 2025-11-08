@@ -6,7 +6,7 @@
   <!-- SAME FOLDER -->
   <link rel="stylesheet" href="teachersclass.css">
   <!-- LOAD FROM config/ -->
-  <script type="module" src=".config/appwrite.js"></script>
+  <script type="module" src="./config/appwrite.js"></script>
 </head>
 <body>
   <h1 class="fixed-header">Upload Test - Class 12</h1>
@@ -33,24 +33,19 @@
     </form>
     <div id="msg" style="margin-top:20px; font-weight:bold;"></div>
   </div>
-
   <script type="module">
     // IMPORT FROM config/appwrite.js
     import { uploadTest } from './config/appwrite.js';
-
     document.getElementById('uploadForm').onsubmit = async (e) => {
       e.preventDefault();
       const file = document.getElementById('file').files[0];
       const subject = document.getElementById('subject').value;
       const teacher = document.getElementById('teacher').value;
       const topic = document.getElementById('topic').value;
-
       if (!file) return alert("Select file");
-
       const msg = document.getElementById('msg');
       msg.textContent = "Uploading...";
       msg.style.color = "blue";
-
       try {
         await uploadTest(file, "Class 12", subject, teacher, topic);
         msg.innerHTML = "Uploaded Successfully!";

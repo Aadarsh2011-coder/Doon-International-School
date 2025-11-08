@@ -1,15 +1,15 @@
-<!-- Class/class12teachers.html -->
 <!DOCTYPE html>
 <html>
 <head>
   <title>Upload Test - Class 12</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./teachersclass.css">
-  <!-- <script type="module" src="./config/appwrite.js"></script> -->
+  <!-- SAME FOLDER -->
+  <link rel="stylesheet" href="teachersclass.css">
+  <!-- LOAD FROM config/ -->
+  <script type="module" src="config/appwrite.js"></script>
 </head>
 <body>
   <h1 class="fixed-header">Upload Test - Class 12</h1>
-
   <div class="welcome-container">
     <button onclick="history.back()" class="cancel-btn" style="margin-bottom:20px;">Back</button>
     <form id="uploadForm">
@@ -35,20 +35,30 @@
   </div>
 
   <script type="module">
+    // IMPORT FROM config/appwrite.js
     import { uploadTest } from './config/appwrite.js';
+
     document.getElementById('uploadForm').onsubmit = async (e) => {
       e.preventDefault();
       const file = document.getElementById('file').files[0];
       const subject = document.getElementById('subject').value;
       const teacher = document.getElementById('teacher').value;
       const topic = document.getElementById('topic').value;
+
       if (!file) return alert("Select file");
+
+      const msg = document.getElementById('msg');
+      msg.textContent = "Uploading...";
+      msg.style.color = "blue";
+
       try {
         await uploadTest(file, "Class 12", subject, teacher, topic);
-        document.getElementById('msg').innerHTML = "Uploaded Successfully!";
+        msg.innerHTML = "Uploaded Successfully!";
+        msg.style.color = "green";
         e.target.reset();
       } catch (err) {
-        document.getElementById('msg').innerHTML = "Upload failed: " + err.message;
+        msg.innerHTML = "Upload failed: " + err.message;
+        msg.style.color = "red";
       }
     };
   </script>

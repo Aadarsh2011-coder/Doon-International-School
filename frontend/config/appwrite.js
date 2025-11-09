@@ -84,7 +84,7 @@ export const getTestsForClass = async (className) => {
 
 // Get file download/view URL
 export const getFileUrl = (fileId) => {
-    return storage.getFileView(BUCKET_ID, fileId);
+  return https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${fileId}/view?project=690cbc750001ae465885;
 };
 
 // Delete test (both file and metadata)

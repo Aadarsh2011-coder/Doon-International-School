@@ -1,68 +1,102 @@
-<!-- class10.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Class 10 Tests</title>
-<link rel="stylesheet" href="studentclass.css">  <script type="module" src="appwrite.js"></script>
-  <style>
-    .test-card {
-      background: white;
-      margin: 20px auto;
-      padding: 20px;
-      border-radius: 15px;
-      max-width: 800px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    img, iframe { width: 100%; border-radius: 10px; margin-top: 10px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 9 Tests | Doon International School</title>
+    <script type="module" src="./config/appwrite.js"></script> <!-- Fixed path -->
+    <link rel="stylesheet" href="studentclass.css">
 </head>
 <body>
-  <h1 class="fixed-header">Class 10 - All Tests</h1>
-  <div class="welcome-container">
-    <button onclick="history.back()" class="cancel-btn" style="margin-bottom:20px;">Back</button>
-    <div id="tests"></div>
-  </div>
+    <h1 class="fixed-header">Class 9 - All Tests</h1>
 
-  <script type="module">
-    import { getTestsForClass, storage, BUCKET_ID } from './appwrite.js';
+    <div class="welcome-container">
+        <button onclick="history.back()" class="cancel-btn">← Back</button>
+        <div id="tests-container">
+            <div id="tests" class="tests-grid"></div>
+            <div id="loading" class="loading">Loading tests...</div>
+            <div id="no-tests" class="no-tests" style="display: none;">
+                <p>No tests uploaded yet. Check back later!</p>
+            </div>
+        </div>
+    </div>
 
-    const testsDiv = document.getElementById('tests');
+    <script type="module">
+        import { getTestsForClass, storage, BUCKET_ID } from './config/appwrite.js'; // Fixed path
 
-    async function loadTests() {
-      const tests = await getTestsForClass("Class 10");
-      
-      if (tests.length === 0) {
-        testsDiv.innerHTML = "<p>No tests uploaded yet.</p>";
-        return;
-      }
+        const testsDiv = document.getElementById('tests');
+        const loadingDiv = document.getElementById('loading');
+        const noTestsDiv = document.getElementById('no-tests');
 
-      const projectId = '690cbc750001ae465885';
-      testsDiv.innerHTML = tests.map(test => {
-        const url = `https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${test.fileId}/view?project=${projectId}`;
-        
-        const isPDF = test.fileId.toLowerCase().includes('.pdf');
-        
-        return `
-          <div class="test-card">
-            <h2>${test.topic}</h2>
-            <p><strong>Subject:</strong> ${test.subject}</p>
-            <p><strong>Teacher:</strong> ${test.teacher}</p>
-            <p><strong>Uploaded:</strong> ${new Date(test.uploadedAt).toLocaleDateString()}</p>
-            ${isPDF 
-              ? `<iframe src="${url}" height="600"></iframe>`
-              : `<img src="${url}" loading="lazy">`
+        async function loadTests() {
+            loadingDiv.style.display = 'block';
+            testsDiv.innerHTML = '';
+            noTestsDiv.style.display = 'none';
+
+            try {
+                const tests = await getTestsForClass("Class 9"); // Fixed class name
+                
+                if (tests.length === 0) {
+                    loadingDiv.style.display = 'none';
+                    noTestsDiv.style.display = 'block';
+                    return;
+                }
+
+                // Generate test cards
+                const testCardsHTML = tests.map(test => {
+                    const fileId = test.fileId;
+                    const fileName = test.topic || 'test-file';
+                    const isPDF = fileName.toLowerCase().includes('.pdf') || fileName.toLowerCase().endsWith('pdf');
+                    const url = `https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${fileId}/view?project=690cbc750001ae465885`;
+                    
+                    return `
+                        <div class="test-card">
+                            <div class="test-header">
+                                <h2 class="test-title">${test.topic || 'Untitled Test'}</h2>
+                                <span class="test-subject">${test.subject}</span>
+                            </div>
+                            <div class="test-meta">
+                                <p><strong>Teacher:</strong> ${test.teacher}</p>
+                                <p><strong>Uploaded:</strong> ${new Date(test.uploadedAt).toLocaleDateString('en-IN')}</p>
+                            </div>
+                            <div class="test-preview">
+                                ${isPDF 
+                                    ? `<iframe src="${url}" class="pdf-viewer" title="Test PDF"></iframe>`
+                                    : `<img src="${url}" alt="Test Image" class="test-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">`
+                                }
+                                <div class="image-fallback" style="display: none;">
+                                    <p>Preview not available. Please download to view.</p>
+                                </div>
+                            </div>
+                            <div class="test-actions">
+                                <a href="${url}" download="${fileName}" class="download-btn confirm-btn">
+                                    📥 Download Test
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                testsDiv.innerHTML = testCardsHTML;
+                loadingDiv.style.display = 'none';
+
+            } catch (error) {
+                console.error('Error loading tests:', error);
+                loadingDiv.style.display = 'none';
+                testsDiv.innerHTML = `
+                    <div class="error-message">
+                        <p>Failed to load tests. Please try again later.</p>
+                        <button onclick="location.reload()" class="retry-btn">Retry</button>
+                    </div>
+                `;
             }
-            <a href="${url}" download class="confirm-btn" style="display:inline-block; margin-top:10px; padding:10px 20px;">
-              Download
-            </a>
-          </div>
-        `;
-      }).join('');
-    }
+        }
 
-    loadTests().catch(err => {
-      testsDiv.innerHTML = `<p style="color:red;">Error loading tests: ${err.message}</p>`;
-    });
-  </script>
+        // Load tests on page load
+        document.addEventListener('DOMContentLoaded', loadTests);
+        
+        // Refresh button functionality
+        window.retryLoad = loadTests;
+    </script>
 </body>
 </html>

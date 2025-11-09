@@ -19,7 +19,7 @@
                 </svg>
             </div>
             <h1>Test Upload Portal</h1>
-            <p>Class 9 • Academic Year</p>
+            <p>Class 10 • Academic Year</p>
         </div>
 
         <!-- Main Card -->
@@ -121,7 +121,26 @@
     </div>
 
     <script type="module">
-        import { uploadTest } from './config/appwrite.js'; // Fixed path to config folder
+        import { initAppwrite, uploadTest } from './config/appwrite.js';
+
+        // Initialize Appwrite session when page loads
+        let isInitialized = false;
+        
+        async function ensureInitialized() {
+            if (!isInitialized) {
+                try {
+                    await initAppwrite();
+                    isInitialized = true;
+                    console.log('Appwrite initialized successfully');
+                } catch (error) {
+                    console.error('Failed to initialize Appwrite:', error);
+                    showMessage('Failed to connect to server. Please refresh the page.', 'error');
+                }
+            }
+        }
+
+        // Initialize on page load
+        ensureInitialized();
 
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -131,7 +150,6 @@
             const teacher = document.getElementById('teacher').value;
             const topic = document.getElementById('topic').value;
             const messageEl = document.getElementById('message');
-            const messageText = document.getElementById('messageText');
             const submitBtn = document.getElementById('submitBtn');
             const btnText = document.getElementById('btnText');
             const spinner = document.getElementById('spinner');
@@ -141,6 +159,9 @@
                 return;
             }
 
+            // Ensure Appwrite is initialized
+            await ensureInitialized();
+
             // Show loading state
             submitBtn.disabled = true;
             btnText.textContent = 'UPLOADING...';
@@ -148,14 +169,25 @@
             messageEl.style.display = 'none';
 
             try {
-                await uploadTest(file, "Class 9", subject, teacher, topic); // Fixed class name
-                showMessage('Test uploaded successfully!', 'success');
+                await uploadTest(file, "Class 10", subject, teacher, topic);
+                showMessage('Test uploaded successfully! ✓', 'success');
                 document.getElementById('uploadForm').reset();
-                // Reset file input display
+                document.getElementById('fileName').style.display = 'none';
                 document.getElementById('fileNameText').textContent = '';
             } catch (err) {
-                showMessage('Upload failed: ' + err.message, 'error');
                 console.error('Upload error:', err);
+                
+                // Better error messages
+                let errorMsg = 'Upload failed: ';
+                if (err.message.includes('authorized')) {
+                    errorMsg += 'Permission denied. Please check Appwrite permissions.';
+                } else if (err.message.includes('network')) {
+                    errorMsg += 'Network error. Please check your connection.';
+                } else {
+                    errorMsg += err.message;
+                }
+                
+                showMessage(errorMsg, 'error');
             } finally {
                 // Reset button state
                 submitBtn.disabled = false;

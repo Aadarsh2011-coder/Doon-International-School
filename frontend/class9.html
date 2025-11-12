@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class 9 Tests | Doon International School</title>
-    <script type="module" src="./config/appwrite.js"></script> <!-- Fixed path -->
     <link rel="stylesheet" href="studentclass.css">
 </head>
 <body>
@@ -22,7 +21,7 @@
     </div>
 
     <script type="module">
-        import { getTestsForClass, storage, BUCKET_ID } from './config/appwrite.js'; // Fixed path
+        import { initAppwrite, getTestsForClass, BUCKET_ID } from './config/appwrite.js';
 
         const testsDiv = document.getElementById('tests');
         const loadingDiv = document.getElementById('loading');
@@ -34,7 +33,10 @@
             noTestsDiv.style.display = 'none';
 
             try {
-                const tests = await getTestsForClass("Class 9"); // Fixed class name
+                // ✅ Make sure Appwrite session exists before fetching
+                await initAppwrite();
+
+                const tests = await getTestsForClass("Class 9");
                 
                 if (tests.length === 0) {
                     loadingDiv.style.display = 'none';
@@ -42,13 +44,12 @@
                     return;
                 }
 
-                // Generate test cards
                 const testCardsHTML = tests.map(test => {
                     const fileId = test.fileId;
                     const fileName = test.topic || 'test-file';
                     const isPDF = fileName.toLowerCase().includes('.pdf') || fileName.toLowerCase().endsWith('pdf');
                     const url = `https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${fileId}/view?project=690cbc750001ae465885`;
-                    
+
                     return `
                         <div class="test-card">
                             <div class="test-header">
@@ -92,11 +93,8 @@
             }
         }
 
-        // Load tests on page load
+        // ✅ Initialize and then load tests when page loads
         document.addEventListener('DOMContentLoaded', loadTests);
-        
-        // Refresh button functionality
-        window.retryLoad = loadTests;
     </script>
 </body>
 </html>

@@ -419,6 +419,28 @@ body {
     color: #6b7280;
 }
 
+.podium-classes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.class-badge {
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.class-badge.more {
+    background: #e5e7eb;
+    color: #6b7280;
+}
+
 .podium-stand {
     height: 120px;
     border-radius: 16px 16px 0 0;

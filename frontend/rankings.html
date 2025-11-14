@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Leaderboard - Class 9</title>
+    <title>Teacher Leaderboard - All Classes</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="rankings.css">
+    <link rel="stylesheet" href="leaderboard.css">
 </head>
 <body>
     <div class="container">
@@ -25,7 +25,7 @@
                     </div>
                     <div>
                         <h1>Teacher Leaderboard</h1>
-                        <p>Class 9 • Academic Performance Rankings</p>
+                        <p>All Classes • Academic Performance Rankings</p>
                     </div>
                 </div>
                 <div class="header-stats">
@@ -53,6 +53,18 @@
                         <div>
                             <div class="stat-value" id="totalTests">0</div>
                             <div class="stat-label">Total Tests</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="stat-value" id="totalClasses">0</div>
+                            <div class="stat-label">Total Classes</div>
                         </div>
                     </div>
                 </div>
@@ -98,6 +110,9 @@
                 <div class="podium-subjects">
                     <span class="subject-badge">N/A</span>
                 </div>
+                <div class="podium-classes">
+                    <span class="class-badge">N/A</span>
+                </div>
                 <div class="podium-stand silver-stand">
                     <div class="stand-label">2nd</div>
                 </div>
@@ -127,6 +142,9 @@
                 <div class="podium-subjects">
                     <span class="subject-badge">N/A</span>
                 </div>
+                <div class="podium-classes">
+                    <span class="class-badge">N/A</span>
+                </div>
                 <div class="podium-stand gold-stand">
                     <div class="stand-label">1st</div>
                 </div>
@@ -150,6 +168,9 @@
                 </div>
                 <div class="podium-subjects">
                     <span class="subject-badge">N/A</span>
+                </div>
+                <div class="podium-classes">
+                    <span class="class-badge">N/A</span>
                 </div>
                 <div class="podium-stand bronze-stand">
                     <div class="stand-label">3rd</div>
@@ -184,40 +205,50 @@
             const rankingsTable = document.getElementById('rankingsTable');
 
             try {
-                // Fetch all tests for Class 9
+                // Fetch ALL tests from ALL classes
                 const response = await databases.listDocuments(
                     DATABASE_ID,
                     COLLECTION_ID
                 );
 
-                const tests = response.documents.filter(doc => doc.class === 'Class 9');
+                const tests = response.documents;
 
                 // Group tests by teacher
                 const teacherStats = {};
+                const allClasses = new Set();
+                
                 tests.forEach(test => {
                     const teacher = test.teacher;
+                    const className = test.class;
+                    
+                    allClasses.add(className);
+                    
                     if (!teacherStats[teacher]) {
                         teacherStats[teacher] = {
                             name: teacher,
                             testCount: 0,
-                            subjects: new Set()
+                            subjects: new Set(),
+                            classes: new Set()
                         };
                     }
                     teacherStats[teacher].testCount++;
                     teacherStats[teacher].subjects.add(test.subject);
+                    teacherStats[teacher].classes.add(className);
                 });
 
                 // Convert to array and sort by test count
                 const rankings = Object.values(teacherStats)
                     .map(teacher => ({
                         ...teacher,
-                        subjects: Array.from(teacher.subjects)
+                        subjects: Array.from(teacher.subjects),
+                        classes: Array.from(teacher.classes)
                     }))
                     .sort((a, b) => b.testCount - a.testCount);
 
                 // Update stats
                 document.getElementById('totalTeachers').textContent = rankings.length;
                 document.getElementById('totalTests').textContent = tests.length;
+                document.getElementById('totalClasses').textContent = allClasses.size;
 
                 // Hide loading, show content
                 loadingState.style.display = 'none';
@@ -254,17 +285,29 @@
                     const nameEl = element.querySelector('.podium-name');
                     const testsEl = element.querySelector('.podium-tests span');
                     const subjectsEl = element.querySelector('.podium-subjects');
+                    const classesEl = element.querySelector('.podium-classes');
                     
                     nameEl.textContent = teacher.name;
                     testsEl.textContent = `${teacher.testCount} test${teacher.testCount !== 1 ? 's' : ''}`;
                     
+                    // Display subjects
                     subjectsEl.innerHTML = teacher.subjects
-                        .slice(0, 3)
+                        .slice(0, 2)
                         .map(subject => `<span class="subject-badge">${subject}</span>`)
                         .join('');
                     
-                    if (teacher.subjects.length > 3) {
-                        subjectsEl.innerHTML += `<span class="subject-badge more">+${teacher.subjects.length - 3}</span>`;
+                    if (teacher.subjects.length > 2) {
+                        subjectsEl.innerHTML += `<span class="subject-badge more">+${teacher.subjects.length - 2}</span>`;
+                    }
+                    
+                    // Display classes
+                    classesEl.innerHTML = teacher.classes
+                        .slice(0, 3)
+                        .map(className => `<span class="class-badge">${className}</span>`)
+                        .join('');
+                    
+                    if (teacher.classes.length > 3) {
+                        classesEl.innerHTML += `<span class="class-badge more">+${teacher.classes.length - 3}</span>`;
                     }
                 }
             });
@@ -308,6 +351,9 @@
                         <div class="teacher-subjects">
                             ${teacher.subjects.map(s => `<span class="subject-tag">${s}</span>`).join('')}
                         </div>
+                        <div class="teacher-classes">
+                            ${teacher.classes.map(c => `<span class="class-tag">${c}</span>`).join('')}
+                        </div>
                     </div>
                     <div class="teacher-stats">
                         <div class="stat-item">
@@ -328,6 +374,16 @@
                             <div>
                                 <div class="stat-number">${teacher.subjects.length}</div>
                                 <div class="stat-text">Subjects</div>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            <div>
+                                <div class="stat-number">${teacher.classes.length}</div>
+                                <div class="stat-text">Classes</div>
                             </div>
                         </div>
                     </div>

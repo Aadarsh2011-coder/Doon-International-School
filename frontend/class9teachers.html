@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="teachersclass.css">
 </head>
 <body>
-    <div class="container">
+   <div class="container">
         <!-- Header -->
         <div class="header">
             <div class="icon-wrapper">
@@ -99,7 +99,7 @@
                         Upload Document
                     </label>
                     <div class="file-upload-wrapper">
-                        <input type="file" id="file" class="file-input" accept=".pdf,image/*" required>
+                        <input type="file" id="file" name="testFile" class="file-input" accept=".pdf,image/*" required>
                         <label for="file" class="file-upload-area">
                             <svg class="file-upload-icon" viewBox="0 0 24 24" fill="none">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -135,7 +135,9 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { uploadTest } from './config/appwrite.js';
+
         // Date formatting
         document.getElementById('testDate').addEventListener('change', function() {
             const date = new Date(this.value);
@@ -193,8 +195,8 @@
             messageEl.classList.remove('show');
 
             try {
-                // Simulate upload - Replace with your actual upload function
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                // Upload test with date
+                await uploadTest(file, "Class 9", subject, teacher, topic, testDate);
                 
                 showMessage('Test uploaded successfully!', 'success');
                 document.getElementById('uploadForm').reset();

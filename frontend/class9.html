@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -94,6 +94,253 @@
         }
 
         // ✅ Initialize and then load tests when page loads
+        document.addEventListener('DOMContentLoaded', loadTests);
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 9 Tests | Doon International School</title>
+</head>
+<body>
+    <h1 class="fixed-header">📚 Class 9 Tests</h1>
+
+    <div class="welcome-container">
+        <div class="top-controls">
+            <button onclick="history.back()" class="back-btn">
+                ← Back
+            </button>
+            <div class="class-badge">🎓 Class 9</div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-title">
+                🔍 Filter Tests
+            </div>
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label>Subject</label>
+                    <select id="subjectFilter">
+                        <option value="">All Subjects</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Science">Science</option>
+                        <option value="English">English</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Social Science">Social Science</option>
+                        <option value="Computer Science">Computer Science</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Teacher</label>
+                    <select id="teacherFilter">
+                        <option value="">All Teachers</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>From Date</label>
+                    <input type="date" id="dateFromFilter">
+                </div>
+                <div class="filter-group">
+                    <label>To Date</label>
+                    <input type="date" id="dateToFilter">
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="filter-btn apply-filter" onclick="applyFilters()">Apply Filters</button>
+                <button class="filter-btn reset-filter" onclick="resetFilters()">Reset</button>
+            </div>
+        </div>
+
+        <!-- Results Info -->
+        <div id="resultsInfo" class="results-info" style="display: none;">
+            <span id="resultCount">Showing all tests</span>
+            <span id="totalTests"></span>
+        </div>
+
+        <!-- Tests Container -->
+        <div id="tests-container">
+            <div id="tests" class="tests-grid"></div>
+            <div id="loading" class="loading">Loading tests...</div>
+            <div id="no-tests" class="no-tests" style="display: none;">
+                <p>📭 No tests found matching your filters.</p>
+                <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">Try adjusting your filters or check back later!</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initAppwrite, getTestsForClass, BUCKET_ID } from './config/appwrite.js';
+
+        const CLASS_NAME = "Class 9"; // 🔒 Fixed class filter
+        let allTests = [];
+        let filteredTests = [];
+
+        const testsDiv = document.getElementById('tests');
+        const loadingDiv = document.getElementById('loading');
+        const noTestsDiv = document.getElementById('no-tests');
+        const resultsInfo = document.getElementById('resultsInfo');
+        const resultCount = document.getElementById('resultCount');
+        const totalTests = document.getElementById('totalTests');
+
+        async function loadTests() {
+            loadingDiv.style.display = 'block';
+            testsDiv.innerHTML = '';
+            noTestsDiv.style.display = 'none';
+            resultsInfo.style.display = 'none';
+
+            try {
+                await initAppwrite();
+                allTests = await getTestsForClass(CLASS_NAME);
+                
+                // Populate teacher dropdown
+                populateTeacherFilter(allTests);
+                
+                // Initially show all tests
+                filteredTests = [...allTests];
+                displayTests(filteredTests);
+
+            } catch (error) {
+                console.error('Error loading tests:', error);
+                loadingDiv.style.display = 'none';
+                testsDiv.innerHTML = `
+                    <div class="error-message">
+                        <p>❌ Failed to load tests. Please try again later.</p>
+                        <button onclick="location.reload()" class="retry-btn">Retry</button>
+                    </div>
+                `;
+            }
+        }
+
+        function populateTeacherFilter(tests) {
+            const teacherFilter = document.getElementById('teacherFilter');
+            const teachers = [...new Set(tests.map(t => t.teacher))].sort();
+            
+            teachers.forEach(teacher => {
+                const option = document.createElement('option');
+                option.value = teacher;
+                option.textContent = teacher;
+                teacherFilter.appendChild(option);
+            });
+        }
+
+        function displayTests(tests) {
+            loadingDiv.style.display = 'none';
+            
+            if (tests.length === 0) {
+                noTestsDiv.style.display = 'block';
+                resultsInfo.style.display = 'none';
+                return;
+            }
+
+            // Show results info
+            resultsInfo.style.display = 'flex';
+            resultCount.textContent = `Showing ${tests.length} test${tests.length !== 1 ? 's' : ''}`;
+            totalTests.textContent = `Total: ${allTests.length}`;
+
+            const testCardsHTML = tests.map((test, index) => {
+                const fileId = test.fileId;
+                const fileName = test.topic || 'test-file';
+                const isPDF = fileName.toLowerCase().includes('.pdf') || fileName.toLowerCase().endsWith('pdf');
+                const url = `https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${fileId}/view?project=690cbc750001ae465885`;
+                
+                const testDate = test.testDate ? new Date(test.testDate).toLocaleDateString('en-IN', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                }) : 'Not specified';
+
+                return `
+                    <div class="test-card" style="animation-delay: ${index * 0.1}s;">
+                        <div class="test-header">
+                            <h2 class="test-title">${test.topic || 'Untitled Test'}</h2>
+                            <span class="test-subject">${test.subject}</span>
+                        </div>
+                        <div class="test-meta">
+                            <p><strong>👨‍🏫 Teacher:</strong> ${test.teacher}</p>
+                            <p class="test-date"><strong>📅 Test Date:</strong> ${testDate}</p>
+                            <p><strong>📤 Uploaded:</strong> ${new Date(test.uploadedAt).toLocaleDateString('en-IN')}</p>
+                        </div>
+                        <div class="test-preview">
+                            ${isPDF 
+                                ? `<iframe src="${url}" class="pdf-viewer" title="Test PDF"></iframe>`
+                                : `<img src="${url}" alt="Test Image" class="test-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">`
+                            }
+                            <div class="image-fallback" style="display: none;">
+                                <p>Preview not available. Please download to view.</p>
+                            </div>
+                        </div>
+                        <div class="test-actions">
+                            <a href="${url}" download="${fileName}" class="download-btn">
+                                📥 Download Test
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            testsDiv.innerHTML = testCardsHTML;
+            noTestsDiv.style.display = 'none';
+        }
+
+        window.applyFilters = function() {
+            const subject = document.getElementById('subjectFilter').value;
+            const teacher = document.getElementById('teacherFilter').value;
+            const dateFrom = document.getElementById('dateFromFilter').value;
+            const dateTo = document.getElementById('dateToFilter').value;
+
+            filteredTests = allTests.filter(test => {
+                // Subject filter
+                if (subject && test.subject !== subject) return false;
+                
+                // Teacher filter
+                if (teacher && test.teacher !== teacher) return false;
+                
+                // Date range filter
+                if (test.testDate) {
+                    const testDate = new Date(test.testDate);
+                    if (dateFrom && testDate < new Date(dateFrom)) return false;
+                    if (dateTo && testDate > new Date(dateTo)) return false;
+                }
+                
+                return true;
+            });
+
+            displayTests(filteredTests);
+        };
+
+        window.resetFilters = function() {
+            document.getElementById('subjectFilter').value = '';
+            document.getElementById('teacherFilter').value = '';
+            document.getElementById('dateFromFilter').value = '';
+            document.getElementById('dateToFilter').value = '';
+            
+            filteredTests = [...allTests];
+            displayTests(filteredTests);
+        };
+
         document.addEventListener('DOMContentLoaded', loadTests);
     </script>
 </body>

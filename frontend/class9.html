@@ -114,16 +114,13 @@
 
 
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class 9 Tests | Doon International School</title>
-    <link rel="stylesheet" href="studentclass.css">
+   <link rel="stylesheet" href="studentclass.css">
 </head>
 <body>
     <h1 class="fixed-header">📚 Class 9 Tests</h1>
@@ -274,7 +271,7 @@
                 }) : 'Not specified';
 
                 return `
-                    <div class="test-card" style="animation-delay: ${index * 0.1}s;">
+                    <div class="test-card">
                         <div class="test-header">
                             <h2 class="test-title">${test.topic || 'Untitled Test'}</h2>
                             <span class="test-subject">${test.subject}</span>
@@ -286,8 +283,8 @@
                         </div>
                         <div class="test-preview">
                             ${isPDF 
-                                ? `<iframe src="${url}" class="pdf-viewer" title="Test PDF"></iframe>`
-                                : `<img src="${url}" alt="Test Image" class="test-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">`
+                                ? `<iframe src="${url}" class="pdf-viewer" title="Test PDF" loading="lazy"></iframe>`
+                                : `<img src="${url}" alt="Test Image" class="test-image" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">`
                             }
                             <div class="image-fallback" style="display: none;">
                                 <p>Preview not available. Please download to view.</p>

@@ -244,7 +244,7 @@
 
     <script>
         // ⚙️ CONFIGURE YOUR BACKEND URL HERE
-        const BACKEND_URL = 'https://arush1234sharma-querio-backend.hf.space" // Change this to your backend URL
+        const BACKEND_URL = 'https://arush1234sharma-querio-backend.hf.space'; // Your Hugging Face backend
         
         async function generatePaper(format) {
             const subject = document.getElementById('subject').value.trim();
@@ -285,7 +285,8 @@
             spinner.style.display = 'block';
 
             try {
-                const response = await fetch(`${BACKEND_URL}/api/generate-question-paper`, {
+                const apiUrl = BACKEND_URL + '/api/generate-question-paper';
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

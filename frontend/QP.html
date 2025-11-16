@@ -243,6 +243,9 @@
     </div>
 
     <script>
+        // ⚙️ CONFIGURE YOUR BACKEND URL HERE
+        const BACKEND_URL = 'http://localhost:8000'; // Change this to your backend URL
+        
         async function generatePaper(format) {
             const subject = document.getElementById('subject').value.trim();
             const difficulty = document.getElementById('difficulty').value;
@@ -282,7 +285,7 @@
             spinner.style.display = 'block';
 
             try {
-                const response = await fetch('/api/generate-question-paper', {
+                const response = await fetch(`${BACKEND_URL}/api/generate-question-paper`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Paper Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-pdf {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-docx {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fee;
+            border: 2px solid #fcc;
+            color: #c33;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .success {
+            background: #efe;
+            border: 2px solid #cfc;
+            color: #3c3;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Question Paper Generator</h1>
+        <p class="subtitle">Create customized exam papers in PDF or DOCX format</p>
+
+        <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" placeholder="e.g., Mathematics, Physics, Computer Science..." required>
+        </div>
+
+        <div class="form-group">
+            <label for="difficulty">Difficulty Level</label>
+            <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Sections to Include</label>
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="mcq" value="Multiple Choice" checked>
+                    <label for="mcq">Multiple Choice</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="short" value="Short Answer" checked>
+                    <label for="short">Short Answer</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="long" value="Long Answer" checked>
+                    <label for="long">Long Answer</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-pdf" onclick="generatePaper('pdf')">
+                <span id="pdf-text">📄 Generate PDF</span>
+                <span id="pdf-spinner" class="spinner" style="display:none;"></span>
+            </button>
+            <button class="btn-docx" onclick="generatePaper('docx')">
+                <span id="docx-text">📋 Generate DOCX</span>
+                <span id="docx-spinner" class="spinner" style="display:none;"></span>
+            </button>
+        </div>
+
+        <div class="error" id="error"></div>
+        <div class="success" id="success"></div>
+    </div>
+
+    <script>
+        async function generatePaper(format) {
+            const subject = document.getElementById('subject').value.trim();
+            const difficulty = document.getElementById('difficulty').value;
+            const error = document.getElementById('error');
+            const success = document.getElementById('success');
+            
+            // Hide previous messages
+            error.style.display = 'none';
+            success.style.display = 'none';
+
+            // Validate subject
+            if (!subject) {
+                error.textContent = 'Please enter a subject';
+                error.style.display = 'block';
+                return;
+            }
+
+            // Get selected sections
+            const sections = [];
+            if (document.getElementById('mcq').checked) sections.push('Multiple Choice');
+            if (document.getElementById('short').checked) sections.push('Short Answer');
+            if (document.getElementById('long').checked) sections.push('Long Answer');
+
+            if (sections.length === 0) {
+                error.textContent = 'Please select at least one section';
+                error.style.display = 'block';
+                return;
+            }
+
+            // Disable buttons and show spinner
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => btn.disabled = true);
+            
+            const spinner = document.getElementById(`${format}-spinner`);
+            const text = document.getElementById(`${format}-text`);
+            text.style.display = 'none';
+            spinner.style.display = 'block';
+
+            try {
+                const response = await fetch('/api/generate-question-paper', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        text: subject,
+                        difficulty: difficulty,
+                        sections: sections,
+                        format: format
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to generate question paper');
+                }
+
+                // Get the filename from Content-Disposition header if available
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = format === 'pdf' ? 'QuestionPaper.pdf' : 'QuestionPaper.docx';
+                if (contentDisposition) {
+                    const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
+                    if (matches != null && matches[1]) {
+                        filename = matches[1].replace(/['"]/g, '');
+                    }
+                }
+
+                // Download the file
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                // Show success message
+                success.textContent = `✓ Question paper downloaded successfully as ${filename}`;
+                success.style.display = 'block';
+
+            } catch (err) {
+                error.textContent = err.message || 'An error occurred while generating the question paper';
+                error.style.display = 'block';
+            } finally {
+                // Re-enable buttons and hide spinner
+                buttons.forEach(btn => btn.disabled = false);
+                spinner.style.display = 'none';
+                text.style.display = 'inline';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Doubts Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .clear-btn {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .clear-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-header h2 {
+            color: #333;
+            font-size: 1.8em;
+        }
+
+        .doubt-count {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .doubt-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .doubt-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .doubt-question {
+            color: #667eea;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: start;
+        }
+
+        .doubt-question::before {
+            content: "❓";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .doubt-section {
+            margin-bottom: 15px;
+        }
+
+        .doubt-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .doubt-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .doubt-context {
+            color: #666;
+            line-height: 1.6;
+            padding-left: 10px;
+            border-left: 3px solid #e0e0e0;
+        }
+
+        .doubt-hint {
+            color: #28a745;
+            line-height: 1.6;
+            padding: 15px;
+            background: #f0f9f4;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+        }
+
+        .error {
+            background: #fee;
+            border: 2px solid #fcc;
+            color: #c33;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .button-container {
+                flex-direction: column;
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Study Doubts Generator</h1>
+        <p class="subtitle">Paste your study material and discover potential questions you might have</p>
+
+        <div class="input-section">
+            <label for="studyText">Enter Your Study Content:</label>
+            <textarea 
+                id="studyText" 
+                placeholder="Paste your study material here... (e.g., lecture notes, textbook excerpts, definitions, etc.)"
+            ></textarea>
+        </div>
+
+        <div class="button-container">
+            <button class="generate-btn" id="generateBtn" onclick="generateDoubts()">
+                Generate Doubts
+            </button>
+            <button class="clear-btn" onclick="clearAll()">
+                Clear All
+            </button>
+        </div>
+
+        <div id="resultsContainer"></div>
+    </div>
+
+    <script>
+        const API_ENDPOINT = 'https://arush1234sharma-querio-backend.hf.space/api/generate-doubts';
+
+        async function generateDoubts() {
+            const text = document.getElementById('studyText').value.trim();
+            const resultsContainer = document.getElementById('resultsContainer');
+            const generateBtn = document.getElementById('generateBtn');
+
+            if (!text) {
+                resultsContainer.innerHTML = '<div class="error">⚠️ Please enter some study content first!</div>';
+                return;
+            }
+
+            // Show loading state
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+            resultsContainer.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing your content and generating potential doubts...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to generate doubts');
+                }
+
+                const data = await response.json();
+                displayDoubts(data.doubts);
+
+            } catch (error) {
+                resultsContainer.innerHTML = `
+                    <div class="error">
+                        <strong>Error:</strong> ${error.message}
+                        <br><br>
+                        <small>Make sure your backend server is running and the API endpoint is correct.</small>
+                    </div>
+                `;
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Doubts';
+            }
+        }
+
+        function displayDoubts(doubts) {
+            const resultsContainer = document.getElementById('resultsContainer');
+
+            if (!doubts || doubts.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🤔</div>
+                        <p>No doubts were generated. Try providing more detailed content.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="results">
+                    <div class="results-header">
+                        <h2>Generated Doubts</h2>
+                        <span class="doubt-count">${doubts.length} doubt${doubts.length !== 1 ? 's' : ''}</span>
+                    </div>
+            `;
+
+            doubts.forEach((doubt, index) => {
+                html += `
+                    <div class="doubt-card" style="animation-delay: ${index * 0.1}s">
+                        <div class="doubt-question">${doubt.question}</div>
+                        
+                        <div class="doubt-section">
+                            <div class="doubt-label">💭 Context</div>
+                            <div class="doubt-context">${doubt.context}</div>
+                        </div>
+                        
+                        <div class="doubt-section">
+                            <div class="doubt-label">💡 Hint</div>
+                            <div class="doubt-hint">${doubt.hint}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            resultsContainer.innerHTML = html;
+        }
+
+        function clearAll() {
+            document.getElementById('studyText').value = '';
+            document.getElementById('resultsContainer').innerHTML = '';
+        }
+
+        // Allow Enter key to submit (Ctrl+Enter for new line)
+        document.getElementById('studyText').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                generateDoubts();
+            }
+        });
+    </script>
+</body>
+</html>

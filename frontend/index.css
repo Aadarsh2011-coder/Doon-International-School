@@ -97,6 +97,52 @@ body::after {
     transform: translateX(-50%) translateY(0);
   }
 }
+/* ====================== Top Navigation ====================== */
+.top-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin: 100px auto 40px;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+  backdrop-filter: blur(20px);
+  transition: all 0.3s ease;
+}
+
+.top-nav a {
+  text-decoration: none;
+  color: #2d3748;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0.5rem 1rem;
+}
+
+.top-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.top-nav a:hover {
+  color: #667eea;
+}
+
+.top-nav a:hover::after {
+  width: 80%;
+}
+
 
 /* ================= Teacher Portal ================= */
 .teacher-portal-icon {

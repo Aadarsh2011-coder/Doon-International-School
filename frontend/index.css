@@ -147,7 +147,7 @@ body::after {
   border-radius: 50px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   width: fit-content;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(40px);
   transition: all 0.3s ease;
 }
 
@@ -281,7 +281,7 @@ body::after {
 @keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px);
   }
   100% {
     opacity: 1;
@@ -352,8 +352,8 @@ body::after {
   font-size: 1.1rem;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   text-decoration: none;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   position: relative;
   overflow: hidden;
   display: block;
@@ -377,7 +377,7 @@ body::after {
   position: absolute;
   right: 20px;
   top: 50%;
-  transform: translateY(-50%) translateX(10px);
+  transform: translateY(-50%) translateX(20px);
   opacity: 0;
   transition: all 0.3s ease;
   font-size: 1.3rem;

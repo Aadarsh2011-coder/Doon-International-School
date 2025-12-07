@@ -271,7 +271,7 @@ body::after {
   align-items: center;
   min-height: 100vh;
   text-align: center;
-  padding: 120px 40px 40px 40px;
+  padding: 80px 40px 40px 40px;
   animation: fadeInUp 1s ease;
 }
 

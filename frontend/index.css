@@ -19,16 +19,19 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 18px;
 }
 
 .school-logo {
-    width: 150px;           /* adjust size */
-    border-radius: 50%;     /* makes it circular */
-    background: white;      /* clean border */
-    padding: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    width: 60px;          /* SAME SIZE as teacher icon */
+    height: 60px;         
+    border-radius: 50%;   /* perfect circle */
+    background: white;    
+    padding: 6px;         /* white inner border */
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);  /* same shadow */
+    object-fit: cover;    /* image fills circle */
 }
+
 @media (min-width: 1400px) {
     .school-logo {
         width: 170px;

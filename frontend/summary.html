@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Summary Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.15em;
+            margin-top: 10px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .input-section, .output-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: #333;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .char-count {
+            font-size: 0.9em;
+            color: #999;
+            background: #f8f9fa;
+            padding: 5px 12px;
+            border-radius: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 350px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .tone-selector {
+            margin-bottom: 20px;
+        }
+
+        .tone-label {
+            display: block;
+            margin-bottom: 12px;
+            color: #555;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .tone-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tone-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .tone-btn:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .tone-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 18px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-copy {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-copy:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .summary-output {
+            min-height: 350px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .summary-output h1, .summary-output h2, .summary-output h3 {
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 12px;
+        }
+
+        .summary-output h1 {
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .summary-output h2 {
+            font-size: 1.5em;
+        }
+
+        .summary-output h3 {
+            font-size: 1.2em;
+        }
+
+        .summary-output ul, .summary-output ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        .summary-output li {
+            margin-bottom: 8px;
+        }
+
+        .summary-output p {
+            margin-bottom: 15px;
+        }
+
+        .summary-output strong {
+            color: #555;
+        }
+
+        .summary-output code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 1.1em;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #667eea;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        .error {
+            background: #fee;
+            border: 2px solid #fcc;
+            color: #c33;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .success-toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(40, 167, 69, 0.4);
+            display: none;
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .container {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .tone-options {
+                flex-direction: column;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span>📝</span>
+                AI Summary Generator
+            </h1>
+            <p>Transform lengthy content into concise, structured summaries instantly</p>
+        </div>
+
+        <div class="tone-selector">
+            <label class="tone-label">Select Summary Tone:</label>
+            <div class="tone-options">
+                <button class="tone-btn" data-tone="soft">
+                    😊 Friendly & Detailed
+                </button>
+                <button class="tone-btn active" data-tone="medium">
+                    📚 Balanced & Professional
+                </button>
+                <button class="tone-btn" data-tone="strict">
+                    🎓 Formal & Concise
+                </button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <div class="section-header">
+                    <span class="section-title">
+                        <span>✍️</span>
+                        Input Text
+                    </span>
+                    <span class="char-count" id="charCount">0 characters</span>
+                </div>
+                <textarea 
+                    id="inputText" 
+                    placeholder="Paste your content here... (articles, lecture notes, research papers, etc.)"
+                ></textarea>
+            </div>
+
+            <div class="output-section">
+                <div class="section-header">
+                    <span class="section-title">
+                        <span>✨</span>
+                        Summary Output
+                    </span>
+                </div>
+                <div class="summary-output" id="summaryOutput">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📄</div>
+                        <p>Your summary will appear here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="summarizeBtn" onclick="generateSummary()">
+                <span>🚀</span>
+                Generate Summary
+            </button>
+            <button class="btn btn-secondary" onclick="clearAll()">
+                <span>🗑️</span>
+                Clear All
+            </button>
+            <button class="btn btn-copy" id="copyBtn" onclick="copySummary()" style="display: none;">
+                <span>📋</span>
+                Copy Summary
+            </button>
+        </div>
+    </div>
+
+    <div class="success-toast" id="successToast">
+        ✅ Summary copied to clipboard!
+    </div>
+
+    <script>
+        const API_ENDPOINT = 'https://arush1234sharma-querio-backend.hf.space/api/summarize';
+        let currentTone = 'medium';
+        let summaryText = '';
+
+        // Tone selection
+        document.querySelectorAll('.tone-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentTone = this.dataset.tone;
+            });
+        });
+
+        // Character counter
+        document.getElementById('inputText').addEventListener('input', function() {
+            const count = this.value.length;
+            document.getElementById('charCount').textContent = `${count.toLocaleString()} characters`;
+        });
+
+        async function generateSummary() {
+            const text = document.getElementById('inputText').value.trim();
+            const outputDiv = document.getElementById('summaryOutput');
+            const summarizeBtn = document.getElementById('summarizeBtn');
+            const copyBtn = document.getElementById('copyBtn');
+
+            if (!text) {
+                outputDiv.innerHTML = '<div class="error">⚠️ Please enter some text to summarize!</div>';
+                return;
+            }
+
+            // Show loading state
+            summarizeBtn.disabled = true;
+            summarizeBtn.innerHTML = '<span>⏳</span> Generating...';
+            copyBtn.style.display = 'none';
+            outputDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Analyzing and summarizing your content...</div>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        text: text,
+                        tone: currentTone
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to generate summary');
+                }
+
+                const data = await response.json();
+                summaryText = data.summary;
+                
+                // Convert markdown to HTML
+                const htmlContent = marked.parse(summaryText);
+                outputDiv.innerHTML = htmlContent;
+                
+                copyBtn.style.display = 'flex';
+
+            } catch (error) {
+                outputDiv.innerHTML = `
+                    <div class="error">
+                        <strong>❌ Error:</strong> ${error.message}
+                        <br><br>
+                        <small>Make sure your backend server is running and accessible.</small>
+                    </div>
+                `;
+            } finally {
+                summarizeBtn.disabled = false;
+                summarizeBtn.innerHTML = '<span>🚀</span> Generate Summary';
+            }
+        }
+
+        function clearAll() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('charCount').textContent = '0 characters';
+            document.getElementById('summaryOutput').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">📄</div>
+                    <p>Your summary will appear here</p>
+                </div>
+            `;
+            document.getElementById('copyBtn').style.display = 'none';
+            summaryText = '';
+        }
+
+        async function copySummary() {
+            if (!summaryText) return;
+
+            try {
+                await navigator.clipboard.writeText(summaryText);
+                
+                const toast = document.getElementById('successToast');
+                toast.style.display = 'block';
+                
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 3000);
+            } catch (error) {
+                alert('Failed to copy to clipboard');
+            }
+        }
+
+        // Keyboard shortcut: Ctrl+Enter to generate
+        document.getElementById('inputText').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                generateSummary();
+            }
+        });
+    </script>
+</body>
+</html>

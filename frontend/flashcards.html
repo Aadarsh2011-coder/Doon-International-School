@@ -293,6 +293,7 @@
 
     <script>
         const API_URL = 'https://arush1234sharma-querio-backend.hf.space';
+        const API_ENDPOINT = '/api/generate-flashcards';
         
         const contentInput = document.getElementById('contentInput');
         const generateBtn = document.getElementById('generateBtn');
@@ -320,7 +321,7 @@
             flashcardsContainer.style.display = 'none';
 
             try {
-                const response = await fetch(`${API_URL}/generate-flashcards`, {
+                const response = await fetch(`${API_URL}${API_ENDPOINT}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

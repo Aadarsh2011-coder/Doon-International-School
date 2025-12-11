@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Flashcard Generator</title>
+    <title>Study Flashcards</title>
     <style>
+        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -12,332 +13,121 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            color: #333;
         }
 
-        .container {
+        /* Main Container */
+        .flashcard-app {
+            width: 100%;
+            max-width: 800px;
             background: white;
             border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-            max-width: 1000px;
-            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            animation: fadeIn 0.5s ease-out;
+            animation: slideIn 0.4s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .header {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             color: white;
-            padding: 40px 30px;
+            padding: 32px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
         }
 
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-            background-size: cover;
+        .app-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
-        .header h1 {
-            font-size: 2.8em;
-            margin-bottom: 15px;
-            position: relative;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        .app-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 400;
         }
 
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.95;
-            position: relative;
-            font-weight: 300;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .content {
-            padding: 40px;
-        }
-
-        .input-section {
-            margin-bottom: 35px;
-        }
-
-        .input-section label {
-            display: block;
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .input-section label::before {
-            content: '📝';
-            font-size: 1.2em;
-        }
-
-        .input-section textarea {
-            width: 100%;
-            min-height: 180px;
-            padding: 20px;
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            font-size: 1.05em;
-            font-family: inherit;
-            resize: vertical;
-            transition: all 0.3s ease;
-            background: #f8fafc;
-            line-height: 1.6;
-        }
-
-        .input-section textarea:focus {
-            outline: none;
-            border-color: #4c6ef5;
+        /* Progress Bar */
+        .progress-container {
+            padding: 24px 32px 0;
             background: white;
-            box-shadow: 0 0 0 3px rgba(76, 110, 245, 0.1);
         }
 
-        .input-section textarea::placeholder {
-            color: #94a3b8;
+        .progress-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 12px;
         }
 
-        .generate-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-size: 1.3em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            width: 20%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            box-shadow: 0 10px 20px rgba(106, 17, 203, 0.3);
-        }
-
-        .generate-btn::before {
-            content: '✨';
-            font-size: 1.2em;
-        }
-
-        .generate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(106, 17, 203, 0.4);
-        }
-
-        .generate-btn:active {
-            transform: translateY(-1px);
-        }
-
-        .generate-btn:disabled {
-            background: #cbd5e1;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px 20px;
-            display: none;
-            background: #f8fafc;
-            border-radius: 16px;
-            margin-top: 20px;
-        }
-
-        .spinner {
-            border: 4px solid #e2e8f0;
-            border-top: 4px solid #6a11cb;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading p {
-            color: #4a5568;
-            font-size: 1.1em;
+            justify-content: space-between;
+            color: #6b7280;
+            font-size: 0.875rem;
             font-weight: 500;
         }
 
-        .flashcards-container {
-            display: none;
-            margin-top: 40px;
-            animation: slideUp 0.5s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .flashcards-header {
+        /* Flashcard Container */
+        .flashcard-container {
+            padding: 32px;
+            min-height: 400px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e2e8f0;
+            flex-direction: column;
         }
 
-        .flashcards-header h2 {
-            color: #2d3748;
-            font-size: 2em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .flashcards-header h2::before {
-            content: '📚';
-            font-size: 1.2em;
-        }
-
-        .card-counter {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1em;
-            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.2);
-        }
-
-        .flashcards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
+        /* Flashcard */
         .flashcard {
             background: white;
             border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            border: 2px solid transparent;
-            min-height: 200px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .flashcard:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-            border-color: #6a11cb;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
         }
 
-        .flashcard.flipped {
-            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
-        }
-
-        .flashcard-front, .flashcard-back {
-            transition: opacity 0.3s ease;
-        }
-
-        .flashcard-front {
-            opacity: 1;
-        }
-
-        .flashcard-back {
-            opacity: 0;
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            right: 30px;
-            bottom: 30px;
-        }
-
-        .flashcard.flipped .flashcard-front {
-            opacity: 0;
-        }
-
-        .flashcard.flipped .flashcard-back {
-            opacity: 1;
-        }
-
-        .flashcard-label {
-            font-size: 0.95em;
-            font-weight: 600;
-            color: #6a11cb;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .flashcard-label::before {
-            font-size: 1.1em;
-        }
-
-        .flashcard-front .flashcard-label::before {
-            content: '❓';
-        }
-
-        .flashcard-back .flashcard-label::before {
-            content: '💡';
-        }
-
-        .flashcard-text {
-            font-size: 1.15em;
-            color: #2d3748;
-            line-height: 1.7;
-        }
-
-        .flashcard-text b, .flashcard-text strong {
-            color: #6a11cb;
-        }
-
-        .flashcard-text ul, .flashcard-text ol {
-            margin-left: 20px;
-            margin-top: 10px;
-        }
-
-        .flashcard-text li {
-            margin-bottom: 8px;
-        }
-
-        .flip-icon {
+        .flashcard-number {
             position: absolute;
             top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            left: 20px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
             color: white;
             width: 40px;
             height: 40px;
@@ -345,375 +135,708 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3em;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3);
+            font-weight: 600;
+            font-size: 1.2rem;
         }
 
-        .flip-icon::before {
-            content: '🔄';
+        .flashcard-content {
+            margin: 40px 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .flashcard:hover .flip-icon {
-            transform: scale(1.1);
+        .flashcard-title {
+            font-size: 1.25rem;
+            color: #4f46e5;
+            font-weight: 600;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .flashcard.flipped .flip-icon {
-            transform: rotate(180deg);
+        .flashcard-question {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1f2937;
+            line-height: 1.4;
+            margin-bottom: 24px;
         }
 
-        .error-message {
+        .flashcard-answer {
+            font-size: 1.4rem;
+            color: #374151;
+            line-height: 1.6;
             display: none;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-            color: white;
             padding: 20px;
-            border-radius: 16px;
+            background: #f9fafb;
+            border-radius: 12px;
+            border-left: 4px solid #4f46e5;
+        }
+
+        .flashcard.show-answer .flashcard-answer {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Action Buttons */
+        .flashcard-actions {
+            display: flex;
+            gap: 16px;
             margin-top: 20px;
-            text-align: center;
-            animation: shake 0.5s ease;
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .new-generation-btn {
-            width: 100%;
-            padding: 16px;
-            background: white;
-            color: #6a11cb;
-            border: 2px solid #6a11cb;
-            border-radius: 16px;
-            font-size: 1.2em;
+        .btn {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 30px;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
         }
 
-        .new-generation-btn::before {
-            content: '🔄';
+        .btn-prev {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
         }
 
-        .new-generation-btn:hover {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        .btn-prev:hover {
+            background: #e5e7eb;
+            border-color: #d1d5db;
+        }
+
+        .btn-reveal {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(106, 17, 203, 0.2);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
         }
 
+        .btn-reveal:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Footer Controls */
+        .app-footer {
+            padding: 24px 32px;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-number {
+            font-weight: 600;
+            color: #4f46e5;
+            font-size: 1.2rem;
+        }
+
+        .btn-reset {
+            padding: 12px 24px;
+            background: white;
+            color: #ef4444;
+            border: 2px solid #ef4444;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-reset:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: #718096;
-            display: none;
+            color: #6b7280;
         }
 
         .empty-state-icon {
-            font-size: 4em;
+            font-size: 4rem;
             margin-bottom: 20px;
             opacity: 0.5;
         }
 
         .empty-state h3 {
-            font-size: 1.8em;
-            margin-bottom: 10px;
-            color: #4a5568;
+            font-size: 1.8rem;
+            color: #374151;
+            margin-bottom: 12px;
         }
 
+        .empty-state p {
+            font-size: 1.1rem;
+            max-width: 400px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .container {
-                border-radius: 20px;
+            .flashcard-app {
+                border-radius: 16px;
             }
-            
-            .header h1 {
-                font-size: 2.2em;
+
+            .app-header {
+                padding: 24px;
             }
-            
-            .header p {
-                font-size: 1.1em;
+
+            .app-header h1 {
+                font-size: 2rem;
             }
-            
-            .content {
-                padding: 25px;
+
+            .progress-container {
+                padding: 16px 24px 0;
             }
-            
-            .flashcards-grid {
-                grid-template-columns: 1fr;
+
+            .flashcard-container {
+                padding: 24px;
+                min-height: 350px;
             }
-            
+
             .flashcard {
-                padding: 25px;
-                min-height: 180px;
+                padding: 30px 24px;
             }
-            
-            .flashcards-header {
+
+            .flashcard-number {
+                top: 15px;
+                left: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
+            }
+
+            .flashcard-content {
+                margin: 30px 0;
+            }
+
+            .flashcard-title {
+                font-size: 1.1rem;
+                margin-bottom: 16px;
+            }
+
+            .flashcard-question {
+                font-size: 1.5rem;
+            }
+
+            .flashcard-answer {
+                font-size: 1.2rem;
+                padding: 16px;
+            }
+
+            .flashcard-actions {
                 flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
+                gap: 12px;
             }
-            
-            .card-counter {
-                align-self: flex-start;
+
+            .btn {
+                padding: 14px 20px;
+                font-size: 1rem;
+            }
+
+            .app-footer {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+                text-align: center;
+            }
+
+            .stats {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .flashcard-app {
+                border-radius: 12px;
+            }
+
+            .app-header {
+                padding: 20px;
+            }
+
+            .app-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .flashcard {
+                padding: 24px 16px;
+            }
+
+            .flashcard-question {
+                font-size: 1.3rem;
+            }
+
+            .flashcard-answer {
+                font-size: 1.1rem;
+            }
+
+            .btn {
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            }
+
+            .flashcard-app {
+                background: #1f2937;
+                color: #f9fafb;
+            }
+
+            .flashcard {
+                background: #374151;
+                border-color: #4b5563;
+                color: #f9fafb;
+            }
+
+            .flashcard-question {
+                color: #f9fafb;
+            }
+
+            .flashcard-answer {
+                background: #4b5563;
+                color: #f3f4f6;
+            }
+
+            .app-footer {
+                background: #111827;
+                border-color: #374151;
+            }
+
+            .btn-prev {
+                background: #374151;
+                color: #d1d5db;
+                border-color: #4b5563;
+            }
+
+            .btn-prev:hover {
+                background: #4b5563;
+            }
+
+            .btn-reset {
+                background: #374151;
+                color: #fca5a5;
+                border-color: #ef4444;
+            }
+
+            .btn-reset:hover {
+                background: #ef4444;
+                color: white;
+            }
+        }
+
+        /* Accessibility */
+        .btn:focus-visible,
+        .btn-reset:focus-visible {
+            outline: 3px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .flashcard-app {
+                box-shadow: none;
+                max-width: none;
+            }
+
+            .app-header,
+            .progress-container,
+            .flashcard-actions,
+            .app-footer {
+                display: none;
+            }
+
+            .flashcard {
+                border: 1px solid #333;
+                break-inside: avoid;
+                margin-bottom: 20px;
+            }
+
+            .flashcard-answer {
+                display: block;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>✨ AI Flashcard Generator</h1>
-            <p>Transform your study material into beautiful, interactive flashcards instantly</p>
+    <div class="flashcard-app">
+        <header class="app-header">
+            <h1>Study Flashcards</h1>
+            <p>Master your subjects with interactive flashcards</p>
+        </header>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">
+                <span id="currentCard">1</span>
+                <span id="totalCards">of 10</span>
+            </div>
         </div>
 
-        <div class="content">
-            <div class="input-section">
-                <label for="contentInput">Enter your study content</label>
-                <textarea 
-                    id="contentInput" 
-                    placeholder="Paste your lecture notes, textbook content, study material, or any educational text here...&#10;&#10;Example:&#10;Photosynthesis is the process by which plants convert light energy into chemical energy...&#10;&#10;Newton's First Law: An object at rest stays at rest..."
-                    rows="6"
-                ></textarea>
-            </div>
-
-            <button class="generate-btn" id="generateBtn">
-                Generate Flashcards
-            </button>
-
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p>AI is creating your flashcards... This may take a moment</p>
-            </div>
-
-            <div class="error-message" id="errorMessage"></div>
-
-            <div class="empty-state" id="emptyState">
-                <div class="empty-state-icon">📝</div>
-                <h3>No Flashcards Yet</h3>
-                <p>Enter some study content above and click "Generate Flashcards" to get started!</p>
-            </div>
-
-            <div class="flashcards-container" id="flashcardsContainer">
-                <div class="flashcards-header">
-                    <h2>Your Flashcards</h2>
-                    <span class="card-counter" id="cardCounter">0 cards</span>
+        <main class="flashcard-container">
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-number" id="cardNumber">1</div>
+                <div class="flashcard-content">
+                    <div class="flashcard-title">Question</div>
+                    <div class="flashcard-question" id="questionText">What is photosynthesis?</div>
+                    <div class="flashcard-answer" id="answerText">
+                        Photosynthesis is the process by which plants convert light energy into chemical energy in the form of glucose, using carbon dioxide and water, and releasing oxygen as a byproduct.
+                    </div>
                 </div>
-                <div class="flashcards-grid" id="flashcardsList"></div>
-                <button class="new-generation-btn" id="newGenerationBtn">
-                    Generate New Set
-                </button>
+                <div class="flashcard-actions">
+                    <button class="btn btn-prev" id="prevBtn">
+                        ← Previous
+                    </button>
+                    <button class="btn btn-reveal" id="revealBtn">
+                        👁 Reveal Answer
+                    </button>
+                    <button class="btn btn-next" id="nextBtn">
+                        Next →
+                    </button>
+                </div>
             </div>
-        </div>
+        </main>
+
+        <footer class="app-footer">
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="cardsReviewed">0</span>
+                    <span>Reviewed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="cardsMastered">0</span>
+                    <span>Mastered</span>
+                </div>
+            </div>
+            <button class="btn-reset" id="resetBtn">
+                🔄 Reset Session
+            </button>
+        </footer>
     </div>
 
     <script>
-        const API_URL = 'https://arush1234sharma-querio-backend.hf.space';
-        const API_ENDPOINT = '/api/generate-flashcards';
+        // Sample flashcard data
+        const flashcards = [
+            {
+                id: 1,
+                question: "What is photosynthesis?",
+                answer: "Photosynthesis is the process by which plants convert light energy into chemical energy in the form of glucose, using carbon dioxide and water, and releasing oxygen as a byproduct."
+            },
+            {
+                id: 2,
+                question: "What are the main requirements for photosynthesis?",
+                answer: "The main requirements for photosynthesis are: light energy (usually from the sun), carbon dioxide (CO₂), water (H₂O), and chlorophyll (the green pigment in plants)."
+            },
+            {
+                id: 3,
+                question: "What are the products of photosynthesis?",
+                answer: "The main products of photosynthesis are glucose (C₆H₁₂O₆) and oxygen (O₂). Glucose serves as food for the plant, while oxygen is released into the atmosphere."
+            },
+            {
+                id: 4,
+                question: "What is the SI unit of amount of substance?",
+                answer: "The SI unit of amount of substance is the mole (mol). One mole contains exactly 6.02214076×10²³ elementary entities (atoms, molecules, ions, or other particles)."
+            },
+            {
+                id: 5,
+                question: "What is Newton's First Law of Motion?",
+                answer: "Newton's First Law, also known as the Law of Inertia, states that an object at rest stays at rest and an object in motion stays in motion with the same speed and in the same direction unless acted upon by an unbalanced force."
+            },
+            {
+                id: 6,
+                question: "What is the chemical formula for water?",
+                answer: "The chemical formula for water is H₂O, which means each water molecule consists of two hydrogen atoms covalently bonded to one oxygen atom."
+            },
+            {
+                id: 7,
+                question: "What are the three states of matter?",
+                answer: "The three classical states of matter are solid, liquid, and gas. Other states include plasma and Bose-Einstein condensate."
+            },
+            {
+                id: 8,
+                question: "What is the capital of France?",
+                answer: "The capital of France is Paris, which is also the largest city in France and a major European cultural, political, and economic center."
+            },
+            {
+                id: 9,
+                question: "What is the Pythagorean theorem?",
+                answer: "The Pythagorean theorem states that in a right triangle, the square of the length of the hypotenuse (c) is equal to the sum of the squares of the lengths of the other two sides (a and b): a² + b² = c²."
+            },
+            {
+                id: 10,
+                question: "What is DNA?",
+                answer: "DNA (Deoxyribonucleic Acid) is a molecule that carries the genetic instructions used in the growth, development, functioning, and reproduction of all known living organisms and many viruses."
+            }
+        ];
+
+        // DOM Elements
+        const flashcard = document.getElementById('flashcard');
+        const questionText = document.getElementById('questionText');
+        const answerText = document.getElementById('answerText');
+        const cardNumber = document.getElementById('cardNumber');
+        const progressFill = document.getElementById('progressFill');
+        const currentCard = document.getElementById('currentCard');
+        const totalCards = document.getElementById('totalCards');
+        const cardsReviewed = document.getElementById('cardsReviewed');
+        const cardsMastered = document.getElementById('cardsMastered');
         
-        const contentInput = document.getElementById('contentInput');
-        const generateBtn = document.getElementById('generateBtn');
-        const loading = document.getElementById('loading');
-        const errorMessage = document.getElementById('errorMessage');
-        const flashcardsContainer = document.getElementById('flashcardsContainer');
-        const flashcardsList = document.getElementById('flashcardsList');
-        const cardCounter = document.getElementById('cardCounter');
-        const newGenerationBtn = document.getElementById('newGenerationBtn');
-        const emptyState = document.getElementById('emptyState');
+        // Buttons
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const revealBtn = document.getElementById('revealBtn');
+        const resetBtn = document.getElementById('resetBtn');
 
-        // Show empty state initially
-        emptyState.style.display = 'block';
+        // State
+        let currentIndex = 0;
+        let reviewedCards = new Set();
+        let masteredCards = new Set();
 
-        generateBtn.addEventListener('click', generateFlashcards);
-        newGenerationBtn.addEventListener('click', resetForm);
+        // Initialize
+        function init() {
+            totalCards.textContent = `of ${flashcards.length}`;
+            updateCard();
+            updateStats();
+        }
 
-        async function generateFlashcards() {
-            const text = contentInput.value.trim();
+        // Update current flashcard
+        function updateCard() {
+            const card = flashcards[currentIndex];
             
-            if (!text) {
-                showError('Please enter some study content to generate flashcards.');
-                return;
-            }
-
-            generateBtn.disabled = true;
-            loading.style.display = 'block';
-            errorMessage.style.display = 'none';
-            flashcardsContainer.style.display = 'none';
-            emptyState.style.display = 'none';
-
-            try {
-                const response = await fetch(`${API_URL}${API_ENDPOINT}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ text: text })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail || 'Failed to generate flashcards. Please try again.');
-                }
-
-                const data = await response.json();
-                
-                // Handle different response formats
-                let flashcards;
-                if (Array.isArray(data)) {
-                    flashcards = data;
-                } else if (data.flashcards && Array.isArray(data.flashcards)) {
-                    flashcards = data.flashcards;
-                } else if (data.questions && data.answers) {
-                    // If API returns separate questions and answers arrays
-                    flashcards = data.questions.map((question, index) => ({
-                        front: question,
-                        back: data.answers[index] || 'Answer not available'
-                    }));
-                } else {
-                    flashcards = [];
-                }
-                
-                if (flashcards.length === 0) {
-                    throw new Error('No flashcards were generated. Please try with different content.');
-                }
-                
-                displayFlashcards(flashcards);
-            } catch (error) {
-                showError(error.message || 'An error occurred while generating flashcards. Please try again.');
-                emptyState.style.display = 'block';
-            } finally {
-                generateBtn.disabled = false;
-                loading.style.display = 'none';
+            questionText.textContent = card.question;
+            answerText.textContent = card.answer;
+            cardNumber.textContent = card.id;
+            currentCard.textContent = card.id;
+            
+            // Update progress bar
+            const progress = ((currentIndex + 1) / flashcards.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            
+            // Reset reveal state
+            flashcard.classList.remove('show-answer');
+            revealBtn.innerHTML = '👁 Reveal Answer';
+            
+            // Add to reviewed cards
+            if (!reviewedCards.has(card.id)) {
+                reviewedCards.add(card.id);
+                updateStats();
             }
         }
 
-        function displayFlashcards(flashcards) {
-            flashcardsList.innerHTML = '';
-            
-            flashcards.forEach((card, index) => {
-                const cardElement = document.createElement('div');
-                cardElement.className = 'flashcard';
-                
-                // Format the content to handle HTML tags properly
-                const frontContent = formatContent(card.front || card.question || 'Question not available');
-                const backContent = formatContent(card.back || card.answer || 'Answer not available');
-                
-                cardElement.innerHTML = `
-                    <div class="flip-icon"></div>
-                    <div class="flashcard-front">
-                        <div class="flashcard-label">Question ${index + 1}</div>
-                        <div class="flashcard-text">${frontContent}</div>
-                    </div>
-                    <div class="flashcard-back">
-                        <div class="flashcard-label">Answer ${index + 1}</div>
-                        <div class="flashcard-text">${backContent}</div>
-                    </div>
-                `;
-                
-                cardElement.addEventListener('click', () => {
-                    cardElement.classList.toggle('flipped');
-                });
-                
-                flashcardsList.appendChild(cardElement);
-            });
-
-            // Update card counter with animation
-            cardCounter.textContent = `${flashcards.length} card${flashcards.length !== 1 ? 's' : ''}`;
-            cardCounter.style.transform = 'scale(1.1)';
-            setTimeout(() => {
-                cardCounter.style.transform = 'scale(1)';
-            }, 200);
-
-            // Show flashcards container with animation
-            flashcardsContainer.style.display = 'block';
-            flashcardsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Update statistics
+        function updateStats() {
+            cardsReviewed.textContent = reviewedCards.size;
+            cardsMastered.textContent = masteredCards.size;
         }
 
-        function formatContent(content) {
-            if (!content) return '';
-            
-            // Convert markdown-style formatting to HTML
-            let formatted = content
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/__(.*?)__/g, '<u>$1</u>')
-                .replace(/\n/g, '<br>')
-                .replace(/^- (.*?)(?=\n|$)/gm, '<li>$1</li>')
-                .replace(/^• (.*?)(?=\n|$)/gm, '<li>$1</li>');
-            
-            // If content contains list items, wrap in ul
-            if (formatted.includes('<li>')) {
-                formatted = formatted.replace(/<li>.*?<\/li>/g, match => {
-                    return `<ul>${match}</ul>`;
-                });
-                // Clean up duplicate ul tags
-                formatted = formatted.replace(/<\/ul>\s*<ul>/g, '');
+        // Navigation functions
+        function nextCard() {
+            if (currentIndex < flashcards.length - 1) {
+                currentIndex++;
+                updateCard();
             }
-            
-            // Escape any remaining HTML to prevent XSS
-            return escapeHtml(formatted);
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
+        function prevCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCard();
+            }
         }
 
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
+        function toggleAnswer() {
+            const isRevealed = flashcard.classList.toggle('show-answer');
             
-            // Auto-hide error after 5 seconds
-            setTimeout(() => {
-                errorMessage.style.display = 'none';
-            }, 5000);
+            if (isRevealed) {
+                revealBtn.innerHTML = '🙈 Hide Answer';
+                // Mark as mastered when answer is revealed multiple times
+                const cardId = flashcards[currentIndex].id;
+                if (!masteredCards.has(cardId)) {
+                    masteredCards.add(cardId);
+                    updateStats();
+                }
+            } else {
+                revealBtn.innerHTML = '👁 Reveal Answer';
+            }
         }
 
-        function resetForm() {
-            contentInput.value = '';
-            flashcardsContainer.style.display = 'none';
-            errorMessage.style.display = 'none';
-            emptyState.style.display = 'block';
-            contentInput.focus();
-            
-            // Smooth scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            // Show confirmation
-            const originalText = generateBtn.textContent;
-            generateBtn.textContent = 'Ready for new content!';
-            generateBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #34d399 100%)';
-            
-            setTimeout(() => {
-                generateBtn.textContent = originalText;
-                generateBtn.style.background = 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)';
-            }, 2000);
+        function resetSession() {
+            if (confirm('Are you sure you want to reset the session? All progress will be lost.')) {
+                currentIndex = 0;
+                reviewedCards.clear();
+                masteredCards.clear();
+                updateCard();
+                updateStats();
+                
+                // Show confirmation message
+                const originalText = revealBtn.textContent;
+                revealBtn.textContent = 'Session Reset!';
+                revealBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                
+                setTimeout(() => {
+                    revealBtn.innerHTML = '👁 Reveal Answer';
+                    revealBtn.style.background = 'linear-gradient(135deg, #4f46e5, #7c3aed)';
+                }, 1500);
+            }
         }
 
-        // Add some example text on click for easy testing
-        contentInput.addEventListener('click', function() {
-            if (this.value === '') {
-                this.value = `Photosynthesis is the process by which plants convert light energy into chemical energy in the form of glucose.
+        // Event Listeners
+        prevBtn.addEventListener('click', prevCard);
+        nextBtn.addEventListener('click', nextCard);
+        revealBtn.addEventListener('click', toggleAnswer);
+        resetBtn.addEventListener('click', resetSession);
 
-Key Points:
-- Occurs in chloroplasts
-- Requires carbon dioxide, water, and light
-- Produces glucose and oxygen
-- Two stages: light-dependent and light-independent reactions
-
-Chemical Equation: 6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂`;
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowLeft':
+                    prevCard();
+                    break;
+                case 'ArrowRight':
+                    nextCard();
+                    break;
+                case ' ':
+                case 'Enter':
+                    e.preventDefault();
+                    toggleAnswer();
+                    break;
+                case 'r':
+                case 'R':
+                    if (e.ctrlKey) resetSession();
+                    break;
             }
         });
+
+        // Touch swipe navigation for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        flashcard.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        flashcard.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swipe left - next card
+                    nextCard();
+                } else {
+                    // Swipe right - previous card
+                    prevCard();
+                }
+            }
+        }
+
+        // Initialize the app
+        init();
+
+        // Auto-save to localStorage
+        function saveProgress() {
+            const progress = {
+                currentIndex,
+                reviewedCards: Array.from(reviewedCards),
+                masteredCards: Array.from(masteredCards),
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('flashcardProgress', JSON.stringify(progress));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('flashcardProgress');
+            if (saved) {
+                try {
+                    const progress = JSON.parse(saved);
+                    currentIndex = progress.currentIndex || 0;
+                    reviewedCards = new Set(progress.reviewedCards || []);
+                    masteredCards = new Set(progress.masteredCards || []);
+                    
+                    // Check if saved data is from today
+                    const savedDate = new Date(progress.timestamp);
+                    const today = new Date();
+                    if (savedDate.toDateString() !== today.toDateString()) {
+                        // Reset if not from today
+                        currentIndex = 0;
+                        reviewedCards.clear();
+                        masteredCards.clear();
+                    }
+                } catch (e) {
+                    console.error('Error loading saved progress:', e);
+                }
+            }
+        }
+
+        // Load saved progress on start
+        loadProgress();
+
+        // Save progress periodically
+        setInterval(saveProgress, 10000); // Save every 10 seconds
+
+        // Save on page unload
+        window.addEventListener('beforeunload', saveProgress);
     </script>
 </body>
 </html>

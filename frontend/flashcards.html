@@ -291,115 +291,111 @@
         </div>
     </div>
 
-    <script>
-        const API_URL = 'https://arush1234sharma-querio-backend.hf.space';
-        const API_ENDPOINT = '/api/generate-flashcards';
+<script>
+    const API_URL = 'https://arush1234sharma-querio-backend.hf.space';
+    const API_ENDPOINT = '/api/generate-flashcards';
+    
+    const contentInput = document.getElementById('contentInput');
+    const generateBtn = document.getElementById('generateBtn');
+    const loading = document.getElementById('loading');
+    const errorMessage = document.getElementById('errorMessage');
+    const flashcardsContainer = document.getElementById('flashcardsContainer');
+    const flashcardsList = document.getElementById('flashcardsList');
+    const cardCounter = document.getElementById('cardCounter');
+    const newGenerationBtn = document.getElementById('newGenerationBtn');
+
+    generateBtn.addEventListener('click', generateFlashcards);
+    newGenerationBtn.addEventListener('click', resetForm);
+
+    async function generateFlashcards() {
+        const text = contentInput.value.trim();
         
-        const contentInput = document.getElementById('contentInput');
-        const generateBtn = document.getElementById('generateBtn');
-        const loading = document.getElementById('loading');
-        const errorMessage = document.getElementById('errorMessage');
-        const flashcardsContainer = document.getElementById('flashcardsContainer');
-        const flashcardsList = document.getElementById('flashcardsList');
-        const cardCounter = document.getElementById('cardCounter');
-        const newGenerationBtn = document.getElementById('newGenerationBtn');
-
-        generateBtn.addEventListener('click', generateFlashcards);
-        newGenerationBtn.addEventListener('click', resetForm);
-
-        async function generateFlashcards() {
-            const text = contentInput.value.trim();
-            
-            if (!text) {
-                showError('Please enter some content to generate flashcards.');
-                return;
-            }
-
-            generateBtn.disabled = true;
-            loading.style.display = 'block';
-            errorMessage.style.display = 'none';
-            flashcardsContainer.style.display = 'none';
-
-            try {
-                const response = await fetch(`${API_URL}${API_ENDPOINT}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ text: text })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail || 'Failed to generate flashcards');
-                }
-
-                const data = await response.json();
-                
-                // Handle both array and object responses
-                const flashcards = Array.isArray(data) ? data : (data.flashcards || []);
-                
-                if (flashcards.length === 0) {
-                    throw new Error('No flashcards were generated. Please try with different content.');
-                }
-                
-                displayFlashcards(flashcards);
-            } catch (error) {
-                showError(error.message || 'An error occurred while generating flashcards. Please try again.');
-            } finally {
-                generateBtn.disabled = false;
-                loading.style.display = 'none';
-            }
+        if (!text) {
+            showError('Please enter some content to generate flashcards.');
+            return;
         }
 
-        function displayFlashcards(flashcards) {
-            flashcardsList.innerHTML = '';
-            
-            flashcards.forEach((card, index) => {
-                const cardElement = document.createElement('div');
-                cardElement.className = 'flashcard';
-                cardElement.innerHTML = `
-                    <div class="flip-icon">⟲</div>
-                    <div class="flashcard-front">
-                        <div class="flashcard-label">Question ${index + 1}</div>
-                        <div class="flashcard-text">${escapeHtml(card.front)}</div>
-                    </div>
-                    <div class="flashcard-back">
-                        <div class="flashcard-label">Answer ${index + 1}</div>
-                        <div class="flashcard-text">${escapeHtml(card.back)}</div>
-                    </div>
-                `;
-                
-                cardElement.addEventListener('click', () => {
-                    cardElement.classList.toggle('flipped');
-                });
-                
-                flashcardsList.appendChild(cardElement);
+        generateBtn.disabled = true;
+        loading.style.display = 'block';
+        errorMessage.style.display = 'none';
+        flashcardsContainer.style.display = 'none';
+
+        try {
+            const response = await fetch(`${API_URL}${API_ENDPOINT}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: text })
             });
 
-            cardCounter.textContent = `${flashcards.length} card${flashcards.length !== 1 ? 's' : ''}`;
-            flashcardsContainer.style.display = 'block';
-            flashcardsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || 'Failed to generate flashcards');
+            }
 
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
+            const data = await response.json();
+            
+            // Handle both array and object responses
+            const flashcards = Array.isArray(data) ? data : (data.flashcards || []);
+            
+            if (flashcards.length === 0) {
+                throw new Error('No flashcards were generated. Please try with different content.');
+            }
+            
+            displayFlashcards(flashcards);
+        } catch (error) {
+            showError(error.message || 'An error occurred while generating flashcards. Please try again.');
+        } finally {
+            generateBtn.disabled = false;
+            loading.style.display = 'none';
         }
+    }
 
-        function resetForm() {
-            contentInput.value = '';
-            flashcardsContainer.style.display = 'none';
-            errorMessage.style.display = 'none';
-            contentInput.focus();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    function displayFlashcards(flashcards) {
+        flashcardsList.innerHTML = '';
+        
+        flashcards.forEach((card, index) => {
+            const cardElement = document.createElement('div');
+            cardElement.className = 'flashcard';
+            cardElement.innerHTML = `
+                <div class="flip-icon">⟲</div>
+                <div class="flashcard-front">
+                    <div class="flashcard-label">Question ${index + 1}</div>
+                    <div class="flashcard-text">${card.front}</div>
+                </div>
+                <div class="flashcard-back">
+                    <div class="flashcard-label">Answer ${index + 1}</div>
+                    <div class="flashcard-text">${card.back}</div>
+                </div>
+            `;
+            
+            cardElement.addEventListener('click', () => {
+                cardElement.classList.toggle('flipped');
+            });
+            
+            flashcardsList.appendChild(cardElement);
+        });
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-    </script>
+        cardCounter.textContent = `${flashcards.length} card${flashcards.length !== 1 ? 's' : ''}`;
+        flashcardsContainer.style.display = 'block';
+        flashcardsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+    }
+
+    function resetForm() {
+        contentInput.value = '';
+        flashcardsContainer.style.display = 'none';
+        errorMessage.style.display = 'none';
+        contentInput.focus();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Remove the escapeHtml function since we're not using it anymore
+</script>
 </body>
 </html>

@@ -13,6 +13,32 @@ body {
   overflow-x: hidden;
   position: relative;
 }
+/* ================= Features Section Layout ================= */
+
+.features-container {
+  display: flex;
+  flex-direction: column; /* mobile default = vertical */
+  gap: 1.2rem;
+  width: 100%;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Desktop/laptop: show features horizontally */
+@media (min-width: 1024px) {
+  .features-container {
+    flex-direction: row;       /* horizontal */
+    flex-wrap: wrap;           /* allow wrapping */
+    justify-content: center;   /* center alignment */
+    gap: 1.5rem;
+  }
+
+  .teachers-dashboard-section {
+    flex: 1 1 calc(33% - 1.5rem);  /* 3 per row on large screens */
+    max-width: 300px;
+  }
+}
 
 .teachers-dashboard-grid {
   display: grid;

@@ -1,0 +1,26 @@
+{
+  "short_name": "Doon International School",
+  "name": "Doon International School",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1976d2",
+  "background_color": "#ffffff",
+  "orientation": "portrait"
+} 
